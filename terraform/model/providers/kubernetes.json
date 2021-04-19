@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "kubernetes",
   "type": "provider",
-  "version": "v2.0.3",
+  "version": "v2.1.0",
   "provider": {
     "client_certificate": {
       "Type": "String",
@@ -4750,6 +4750,11 @@
                                                   "Type": "String",
                                                   "Required": true,
                                                   "Description": "The name of secret that contains Azure Storage Account Name and Key"
+                                                },
+                                                "secret_namespace": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
                                                 },
                                                 "share_name": {
                                                   "Type": "String",
@@ -10047,6 +10052,11 @@
                                       "Type": "String",
                                       "Required": true,
                                       "Description": "The name of secret that contains Azure Storage Account Name and Key"
+                                    },
+                                    "secret_namespace": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
                                     },
                                     "share_name": {
                                       "Type": "String",
@@ -15366,6 +15376,11 @@
                                       "Type": "String",
                                       "Required": true,
                                       "Description": "The name of secret that contains Azure Storage Account Name and Key"
+                                    },
+                                    "secret_namespace": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
                                     },
                                     "share_name": {
                                       "Type": "String",
@@ -21514,6 +21529,11 @@
                                       "Required": true,
                                       "Description": "The name of secret that contains Azure Storage Account Name and Key"
                                     },
+                                    "secret_namespace": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
+                                    },
                                     "share_name": {
                                       "Type": "String",
                                       "Required": true,
@@ -23985,6 +24005,42 @@
                 "Value": "String"
               }
             },
+            "claim_ref": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A reference to the persistent volume claim details for statically managed PVs. More Info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#binding",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of the PersistentVolumeClaim",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Value": "String"
+                    }
+                  },
+                  "namespace": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The namespace of the PersistentVolumeClaim. Uses 'default' namespace if none is specified.",
+                    "ConfigImplicitMode": "Attr",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "default"
+                    },
+                    "Elem": {
+                      "Value": "String"
+                    }
+                  }
+                }
+              }
+            },
             "mount_options": {
               "Type": "Set",
               "Optional": true,
@@ -24215,6 +24271,11 @@
                           "Type": "String",
                           "Required": true,
                           "Description": "The name of secret that contains Azure Storage Account Name and Key"
+                        },
+                        "secret_namespace": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
                         },
                         "share_name": {
                           "Type": "String",
@@ -28807,6 +28868,11 @@
                           "Type": "String",
                           "Required": true,
                           "Description": "The name of secret that contains Azure Storage Account Name and Key"
+                        },
+                        "secret_namespace": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
                         },
                         "share_name": {
                           "Type": "String",
@@ -34556,6 +34622,11 @@
                                       "Required": true,
                                       "Description": "The name of secret that contains Azure Storage Account Name and Key"
                                     },
+                                    "secret_namespace": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
+                                    },
                                     "share_name": {
                                       "Type": "String",
                                       "Required": true,
@@ -36223,10 +36294,16 @@
       }
     },
     "kubernetes_secret": {
+      "binary_data": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "A map of the secret data in base64 encoding. Use this for binary data."
+      },
       "data": {
         "Type": "Map",
         "Optional": true,
-        "Description": "A map of the secret data."
+        "Description": "A map of the secret data.",
+        "Computed": true
       },
       "metadata": {
         "Type": "List",
@@ -40548,6 +40625,11 @@
                                       "Type": "String",
                                       "Required": true,
                                       "Description": "The name of secret that contains Azure Storage Account Name and Key"
+                                    },
+                                    "secret_namespace": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
                                     },
                                     "share_name": {
                                       "Type": "String",
@@ -46859,6 +46941,11 @@
                           "Type": "String",
                           "Required": true,
                           "Description": "The name of secret that contains Azure Storage Account Name and Key"
+                        },
+                        "secret_namespace": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is \"default\" namespace."
                         },
                         "share_name": {
                           "Type": "String",

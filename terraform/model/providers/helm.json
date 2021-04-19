@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "helm",
   "type": "provider",
-  "version": "v2.1.0",
+  "version": "v2.1.1",
   "provider": {
     "debug": {
       "Type": "Bool",

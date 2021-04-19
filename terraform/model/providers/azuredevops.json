@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "azuredevops",
   "type": "provider",
-  "version": "v0.1.3",
+  "version": "v0.1.4",
   "provider": {
     "org_service_url": {
       "Type": "String",
@@ -1677,6 +1677,62 @@
         "Computed": true
       }
     },
+    "azuredevops_serviceendpoint_azuredevops": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "org_url": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Organization Url.",
+        "DefaultFunc": "ENV(AZDO_DEVOPS_ORG_URL)"
+      },
+      "personal_access_token": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Azure DevOps personal access token.",
+        "DefaultFunc": "ENV(AZDO_DEVOPS_PAT)"
+      },
+      "personal_access_token_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'personal_access_token'",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "release_api_url": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(AZDO_DEVOPS_RELEASE_API_URL)"
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "azuredevops_serviceendpoint_azurerm": {
       "__timeouts__": [
         "create",
@@ -1795,7 +1851,7 @@
       "password": {
         "Type": "String",
         "Required": true,
-        "Description": "The bitbucket password whi|ch should be used.",
+        "Description": "The bitbucket password which should be used.",
         "DefaultFunc": "ENV(AZDO_BITBUCKET_SERVICE_CONNECTION_PASSWORD)"
       },
       "password_hash": {
@@ -1963,6 +2019,68 @@
         "Required": true
       },
       "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "azuredevops_serviceendpoint_github_enterprise": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "auth_personal": {
+        "Type": "Set",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "personal_access_token": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The GitHub personal access token which should be used.",
+              "DefaultFunc": "ENV(AZDO_GITHUB_ENTERPRISE_SERVICE_CONNECTION_PAT)"
+            },
+            "personal_access_token_hash": {
+              "Type": "String",
+              "Description": "A bcrypted hash of the attribute 'personal_access_token'",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "url": {
         "Type": "String",
         "Required": true
       }
@@ -2146,6 +2264,55 @@
         "Required": true
       }
     },
+    "azuredevops_serviceendpoint_npm": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "access_token": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The access token for npm registry"
+      },
+      "access_token_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'access_token'",
+        "Computed": true
+      },
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "url": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Url for the npm registry"
+      }
+    },
     "azuredevops_serviceendpoint_runpipeline": {
       "__timeouts__": [
         "create",
@@ -2256,6 +2423,75 @@
         "Type": "String",
         "Required": true,
         "Description": "Url for the SonarQube Server"
+      }
+    },
+    "azuredevops_serviceendpoint_ssh": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "host": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Organization Url."
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true
+      },
+      "password_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'password'",
+        "Computed": true
+      },
+      "port": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "22"
+        }
+      },
+      "private_key": {
+        "Type": "String",
+        "Optional": true
+      },
+      "private_key_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'private_key'",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "username": {
+        "Type": "String",
+        "Required": true
       }
     },
     "azuredevops_user_entitlement": {

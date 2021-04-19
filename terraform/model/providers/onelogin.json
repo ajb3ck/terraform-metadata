@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "onelogin",
   "type": "provider",
-  "version": "v0.1.13",
+  "version": "v0.1.14",
   "provider": {
     "client_id": {
       "Type": "String",
@@ -959,5 +959,109 @@
       }
     }
   },
-  "data-sources": {}
+  "data-sources": {
+    "onelogin_users": {
+      "comment": {
+        "Type": "String",
+        "Optional": true
+      },
+      "company": {
+        "Type": "String",
+        "Optional": true
+      },
+      "custom_attributes": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "department": {
+        "Type": "String",
+        "Optional": true
+      },
+      "directory_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "distinguished_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "email": {
+        "Type": "String",
+        "Optional": true
+      },
+      "external_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "firstname": {
+        "Type": "String",
+        "Optional": true
+      },
+      "group_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "lastname": {
+        "Type": "String",
+        "Optional": true
+      },
+      "manager_ad_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "manager_user_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "member_of": {
+        "Type": "String",
+        "Optional": true
+      },
+      "phone": {
+        "Type": "String",
+        "Optional": true
+      },
+      "samaccountname": {
+        "Type": "String",
+        "Optional": true
+      },
+      "state": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "status": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "title": {
+        "Type": "String",
+        "Optional": true
+      },
+      "trusted_idp_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Required": true
+      },
+      "userprincipalname": {
+        "Type": "String",
+        "Optional": true
+      }
+    }
+  }
 }

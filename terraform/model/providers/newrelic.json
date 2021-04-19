@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "newrelic",
   "type": "provider",
-  "version": "v2.21.0",
+  "version": "v2.21.1",
   "provider": {
     "account_id": {
       "Type": "Int",
@@ -328,7 +328,7 @@
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "The type of condition. One of: (apm_app_metric, apm_jvm_metric, apm_kt_metric, browser_metric, mobile_metric, servers_metric)."
+        "Description": "The type of condition. One of: (browser_metric, mobile_metric, servers_metric, apm_app_metric, apm_jvm_metric, apm_kt_metric)."
       },
       "user_defined_metric": {
         "Type": "String",
@@ -2883,7 +2883,7 @@
       },
       "type": {
         "Type": "String",
-        "Description": "The type of channel. One of: (pagerduty, slack, user, victorops, webhook, email, opsgenie).",
+        "Description": "The type of channel. One of: (webhook, email, opsgenie, pagerduty, slack, user, victorops).",
         "Computed": true
       }
     },
