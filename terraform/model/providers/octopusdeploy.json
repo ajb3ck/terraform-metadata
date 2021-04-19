@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "octopusdeploy",
   "type": "provider",
-  "version": "v0.7.22",
+  "version": "v0.7.28",
   "provider": {
     "address": {
       "Type": "String",
@@ -615,6 +615,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1091,6 +1092,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1717,6 +1719,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -2067,13 +2070,23 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "actions": {
+            "action_package": {
               "Type": "List",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
               "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
+                "Type": "SchemaInfo",
+                "Info": {
+                  "deployment_action": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "package_reference": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
               }
             },
             "id": {
@@ -2120,6 +2133,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -5249,6 +5263,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -6096,6 +6111,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -6554,9 +6570,9 @@
       },
       "environments": {
         "Type": "List",
-        "Optional": true,
-        "Description": "A list of environment IDs associated with this resource.",
-        "Computed": true,
+        "Required": true,
+        "Description": "A list of environment IDs associated with this listening tentacle.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -7399,6 +7415,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -7829,6 +7846,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -8207,7 +8225,7 @@
         "Description": "The space ID associated with this resource.",
         "Computed": true
       },
-      "templates": {
+      "template": {
         "Type": "List",
         "Optional": true,
         "IsBlock": true,
@@ -8414,17 +8432,6 @@
         "Type": "String",
         "Optional": true,
         "Description": "The description of this resource."
-      },
-      "environments": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "A list of environment IDs associated with this resource.",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
       },
       "id": {
         "Type": "String",
@@ -8797,6 +8804,7 @@
         "Type": "List",
         "Required": true,
         "Description": "A list of environment IDs associated with this resource.",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -9547,6 +9555,15 @@
         "Type": "String",
         "Computed": true
       },
+      "is_editable": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether or not this variable is considered editable.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "is_sensitive": {
         "Type": "Bool",
         "Optional": true,
@@ -9599,7 +9616,7 @@
         }
       },
       "scope": {
-        "Type": "Set",
+        "Type": "List",
         "Optional": true,
         "MaxItems": 1,
         "IsBlock": true,
@@ -9611,7 +9628,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of actions that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9622,7 +9638,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of channels that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9633,7 +9648,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of environments that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9644,7 +9658,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of machines that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9655,7 +9668,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of parent deployments that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9665,7 +9677,6 @@
             "private": {
               "Type": "List",
               "Optional": true,
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9676,7 +9687,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of process owners that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9687,7 +9697,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of projects that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9698,7 +9707,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of roles that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9709,7 +9717,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of target roles that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9720,7 +9727,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of tenant tags that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9731,7 +9737,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of tenants that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9742,7 +9747,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of triggers that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -9753,7 +9757,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "A list of users that are scoped to this variable value.",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -11923,13 +11926,23 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
-                  "actions": {
+                  "action_package": {
                     "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
                     "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "deployment_action": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "package_reference": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
                     }
                   },
                   "id": {
@@ -14004,7 +14017,7 @@
             },
             "environments": {
               "Type": "List",
-              "Description": "A list of environment IDs associated with this resource.",
+              "Description": "A list of environment IDs associated with this listening tentacle.",
               "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
@@ -15738,16 +15751,6 @@
               "Description": "The description of this resource.",
               "Computed": true
             },
-            "environments": {
-              "Type": "List",
-              "Description": "A list of environment IDs associated with this resource.",
-              "Computed": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
             "id": {
               "Type": "String",
               "Description": "The unique ID for this resource.",
@@ -16031,7 +16034,7 @@
               "Description": "The space ID associated with this resource.",
               "Computed": true
             },
-            "templates": {
+            "template": {
               "Type": "List",
               "Computed": true,
               "IsBlock": true,
@@ -17563,6 +17566,11 @@
               "Type": "String",
               "Computed": true
             },
+            "is_editable": {
+              "Type": "Bool",
+              "Description": "Indicates whether or not this variable is considered editable.",
+              "Computed": true
+            },
             "is_sensitive": {
               "Type": "Bool",
               "Description": "Indicates whether or not this resource is considered sensitive and should be kept secret.",
@@ -17610,7 +17618,7 @@
               }
             },
             "scope": {
-              "Type": "Set",
+              "Type": "List",
               "Computed": true,
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
@@ -17621,7 +17629,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of actions that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17632,7 +17639,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of channels that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17643,7 +17649,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of environments that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17654,7 +17659,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of machines that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17665,7 +17669,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of parent deployments that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17675,7 +17678,6 @@
                   "private": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17686,7 +17688,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of process owners that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17697,7 +17698,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of projects that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17708,7 +17708,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of roles that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17719,7 +17718,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of target roles that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17730,7 +17728,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of tenant tags that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17741,7 +17738,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of tenants that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17752,7 +17748,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of triggers that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17763,7 +17758,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of users that are scoped to this variable value.",
-                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",

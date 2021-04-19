@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "heroku",
   "type": "provider",
-  "version": "v4.1.1-beta",
+  "version": "v4.2.0",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -629,6 +629,74 @@
       "stage": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "heroku_review_app_config": {
+      "automatic_review_apps": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "base_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "deploy_target": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "destroy_stale_apps": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "org_repo": {
+        "Type": "String",
+        "Required": true
+      },
+      "pipeline_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "repo_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "stale_days": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "wait_for_ci": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       }
     },
     "heroku_slug": {

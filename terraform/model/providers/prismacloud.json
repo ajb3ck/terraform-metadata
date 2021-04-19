@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "prismacloud",
   "type": "provider",
-  "version": "v1.1.1",
+  "version": "v1.1.2",
   "provider": {
     "customer_name": {
       "Type": "String",
@@ -1246,8 +1246,8 @@
             },
             "policy_id": {
               "Type": "String",
-              "Optional": true,
-              "Description": "Policy ID"
+              "Description": "Policy ID",
+              "Computed": true
             },
             "requirement_description": {
               "Type": "String",

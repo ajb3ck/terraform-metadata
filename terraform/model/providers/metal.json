@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "metal",
   "type": "provider",
-  "version": "v2.0.0",
+  "version": "v2.0.1",
   "provider": {
     "auth_token": {
       "Type": "String",
@@ -1661,7 +1661,17 @@
     "metal_spot_market_price": {
       "facility": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "ConflictsWith": [
+          "metro"
+        ]
+      },
+      "metro": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "facility"
+        ]
       },
       "plan": {
         "Type": "String",

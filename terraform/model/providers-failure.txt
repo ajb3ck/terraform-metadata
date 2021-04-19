@@ -1,6 +1,9 @@
 akamai
+azurerm
 dynatrace
+intersight
 kubernetes-alpha
+tencentcloud
 terraform
 thunder
 time

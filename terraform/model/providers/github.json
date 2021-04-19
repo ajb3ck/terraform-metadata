@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "github",
   "type": "provider",
-  "version": "v4.8.0",
+  "version": "v4.9.2",
   "provider": {
     "base_url": {
       "Type": "String",
@@ -1011,6 +1011,83 @@
         "Computed": true
       }
     },
+    "github_repository_pull_request": {
+      "base_ref": {
+        "Type": "String",
+        "Required": true
+      },
+      "base_repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "base_sha": {
+        "Type": "String",
+        "Computed": true
+      },
+      "body": {
+        "Type": "String",
+        "Optional": true
+      },
+      "draft": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "head_ref": {
+        "Type": "String",
+        "Required": true
+      },
+      "head_sha": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "List",
+        "Description": "List of names of labels on the PR",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "maintainer_can_modify": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "number": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "opened_at": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "opened_by": {
+        "Type": "String",
+        "Description": "Username of the PR creator",
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Optional": true
+      },
+      "state": {
+        "Type": "String",
+        "Computed": true
+      },
+      "title": {
+        "Type": "String",
+        "Required": true
+      },
+      "updated_at": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
     "github_repository_webhook": {
       "active": {
         "Type": "Bool",
@@ -1448,6 +1525,15 @@
       "plan": {
         "Type": "String",
         "Computed": true
+      },
+      "repositories": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "github_organization_team_sync_groups": {
@@ -1818,6 +1904,212 @@
       "title": {
         "Type": "String",
         "Computed": true
+      }
+    },
+    "github_repository_pull_request": {
+      "base_ref": {
+        "Type": "String",
+        "Computed": true
+      },
+      "base_repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "base_sha": {
+        "Type": "String",
+        "Computed": true
+      },
+      "body": {
+        "Type": "String",
+        "Computed": true
+      },
+      "draft": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "head_owner": {
+        "Type": "String",
+        "Computed": true
+      },
+      "head_ref": {
+        "Type": "String",
+        "Computed": true
+      },
+      "head_repository": {
+        "Type": "String",
+        "Computed": true
+      },
+      "head_sha": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "List",
+        "Description": "List of names of labels on the PR",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "maintainer_can_modify": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "number": {
+        "Type": "Int",
+        "Required": true
+      },
+      "opened_at": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "opened_by": {
+        "Type": "String",
+        "Description": "Username of the PR creator",
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Optional": true
+      },
+      "state": {
+        "Type": "String",
+        "Computed": true
+      },
+      "title": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_at": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "github_repository_pull_requests": {
+      "base_ref": {
+        "Type": "String",
+        "Optional": true
+      },
+      "base_repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "head_ref": {
+        "Type": "String",
+        "Optional": true
+      },
+      "owner": {
+        "Type": "String",
+        "Optional": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "base_ref": {
+              "Type": "String",
+              "Computed": true
+            },
+            "base_sha": {
+              "Type": "String",
+              "Computed": true
+            },
+            "body": {
+              "Type": "String",
+              "Computed": true
+            },
+            "draft": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "head_owner": {
+              "Type": "String",
+              "Computed": true
+            },
+            "head_ref": {
+              "Type": "String",
+              "Computed": true
+            },
+            "head_repository": {
+              "Type": "String",
+              "Computed": true
+            },
+            "head_sha": {
+              "Type": "String",
+              "Computed": true
+            },
+            "labels": {
+              "Type": "List",
+              "Description": "List of names of labels on the PR",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "maintainer_can_modify": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "number": {
+              "Type": "Int",
+              "Description": "Per-repository, monotonically increasing ID of this PR",
+              "Computed": true
+            },
+            "opened_at": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "opened_by": {
+              "Type": "String",
+              "Description": "Username of the PR creator",
+              "Computed": true
+            },
+            "state": {
+              "Type": "String",
+              "Computed": true
+            },
+            "title": {
+              "Type": "String",
+              "Computed": true
+            },
+            "updated_at": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "sort_by": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "created"
+        }
+      },
+      "sort_direction": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "asc"
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "open"
+        }
       }
     },
     "github_team": {

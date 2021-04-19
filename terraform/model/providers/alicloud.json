@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "alicloud",
   "type": "provider",
-  "version": "v1.121.1",
+  "version": "v1.121.2",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -917,7 +917,8 @@
       },
       "db_cluster_class": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Deprecated": "It duplicates with attribute db_node_class and is deprecated from 1.121.2."
       },
       "db_cluster_version": {
         "Type": "String",
@@ -934,11 +935,13 @@
       },
       "db_node_count": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "db_node_storage": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "description": {
         "Type": "String",
@@ -960,7 +963,7 @@
       },
       "mode": {
         "Type": "String",
-        "Optional": true
+        "Required": true
       },
       "modify_type": {
         "Type": "String",
@@ -1082,7 +1085,8 @@
       },
       "db_cluster_class": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Deprecated": "It duplicates with attribute db_node_class and is deprecated from 1.121.2."
       },
       "db_cluster_version": {
         "Type": "String",
@@ -1099,11 +1103,13 @@
       },
       "db_node_count": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "db_node_storage": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "description": {
         "Type": "String",
@@ -1125,7 +1131,7 @@
       },
       "mode": {
         "Type": "String",
-        "Optional": true
+        "Required": true
       },
       "modify_type": {
         "Type": "String",
@@ -2821,6 +2827,7 @@
     "alicloud_cen_bandwidth_package": {
       "__timeouts__": [
         "create",
+        "update",
         "delete"
       ],
       "bandwidth": {
@@ -10308,7 +10315,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "1618439758"
+          "Value": "1618866208"
         }
       },
       "post_start": {
@@ -13782,7 +13789,8 @@
       "internet_max_bandwidth_in": {
         "Type": "Int",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "The attribute is invalid and no any affect for the instance. So it has been deprecated from version v1.121.2."
       },
       "internet_max_bandwidth_out": {
         "Type": "Int",
@@ -15120,7 +15128,7 @@
         "Optional": true,
         "Default": {
           "Type": "int64",
-          "Value": "1618439758"
+          "Value": "1618866208"
         }
       },
       "notification_list": {
@@ -16489,6 +16497,14 @@
         "Type": "String",
         "Optional": true
       },
+      "encrypt_type": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "protocol_type": {
         "Type": "String",
         "Required": true
@@ -17203,7 +17219,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "tf-oss-bucket-20210414223558068800000002"
+          "Value": "tf-oss-bucket-20210419210328399400000002"
         }
       },
       "cors_rule": {
@@ -17287,6 +17303,25 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "abort_multipart_upload": {
+              "Type": "Set",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "created_before_date": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "days": {
+                    "Type": "Int",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "enabled": {
               "Type": "Bool",
               "Required": true
@@ -17299,12 +17334,20 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "created_before_date": {
+                    "Type": "String",
+                    "Optional": true
+                  },
                   "date": {
                     "Type": "String",
                     "Optional": true
                   },
                   "days": {
                     "Type": "Int",
+                    "Optional": true
+                  },
+                  "expired_object_delete_marker": {
+                    "Type": "Bool",
                     "Optional": true
                   }
                 }
@@ -17314,6 +17357,40 @@
               "Type": "String",
               "Optional": true,
               "Computed": true
+            },
+            "noncurrent_version_expiration": {
+              "Type": "Set",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "days": {
+                    "Type": "Int",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "noncurrent_version_transition": {
+              "Type": "Set",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "days": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "storage_class": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
             },
             "prefix": {
               "Type": "String",
@@ -17886,7 +17963,8 @@
       },
       "vswitch_id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "zone_id": {
         "Type": "String",
@@ -20639,7 +20717,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "tf-lb-20210414223558068600000001"
+          "Value": "tf-lb-20210419210328399100000001"
         }
       },
       "period": {
@@ -39427,6 +39505,10 @@
             },
             "description": {
               "Type": "String",
+              "Computed": true
+            },
+            "encrypt_type": {
+              "Type": "Int",
               "Computed": true
             },
             "id": {
