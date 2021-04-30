@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "ah",
   "type": "provider",
-  "version": "v0.1.5",
+  "version": "v0.1.7",
   "provider": {
     "access_token": {
       "Type": "String",

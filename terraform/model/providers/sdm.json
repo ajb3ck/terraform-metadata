@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "sdm",
   "type": "provider",
-  "version": "v1.0.19",
+  "version": "v1.0.23",
   "provider": {
     "api_access_key": {
       "Type": "String",
@@ -3425,6 +3425,14 @@
               "Optional": true,
               "Description": "ID of the secret store containing credentials for this resource, if any."
             },
+            "secret_store_username_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_store_username_path": {
+              "Type": "String",
+              "Optional": true
+            },
             "tags": {
               "Type": "Map",
               "Optional": true,
@@ -3437,7 +3445,7 @@
             },
             "username": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             }
           }
         }
@@ -3476,6 +3484,14 @@
               "Optional": true,
               "Description": "ID of the secret store containing credentials for this resource, if any."
             },
+            "secret_store_username_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_store_username_path": {
+              "Type": "String",
+              "Optional": true
+            },
             "tags": {
               "Type": "Map",
               "Optional": true,
@@ -3488,7 +3504,78 @@
             },
             "username": {
               "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "ssh_customer_key": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_deprecated_key_exchanges": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "hostname": {
+              "Type": "String",
               "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Unique human-readable name of the Resource."
+            },
+            "port": {
+              "Type": "Int",
+              "Required": true
+            },
+            "port_forwarding": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_store_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "ID of the secret store containing credentials for this resource, if any."
+            },
+            "secret_store_private_key_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_store_private_key_path": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_store_username_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_store_username_path": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tags": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Tags is a map of key, value pairs.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true
             }
           }
         }
@@ -7022,6 +7109,66 @@
                   },
                   "port_forwarding": {
                     "Type": "Bool",
+                    "Optional": true
+                  },
+                  "secret_store_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "ID of the secret store containing credentials for this resource, if any."
+                  },
+                  "tags": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "Tags is a map of key, value pairs.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "username": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "ssh_customer_key": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "allow_deprecated_key_exchanges": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "hostname": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Unique identifier of the Resource."
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Unique human-readable name of the Resource."
+                  },
+                  "port": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "port_forwarding": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "private_key": {
+                    "Type": "String",
                     "Optional": true
                   },
                   "secret_store_id": {

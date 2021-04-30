@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "oci",
   "type": "provider",
-  "version": "v4.22.0",
+  "version": "v4.24.0",
   "provider": {
     "auth": {
       "Type": "String",
@@ -3169,6 +3169,114 @@
       "status": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "oci_cloud_guard_data_mask_rule": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "compartment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "data_mask_categories": {
+        "Type": "List",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "data_mask_rule_status": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "defined_tags": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "freeform_tags": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "iam_group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "lifecyle_details": {
+        "Type": "String",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "system_tags": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "target_selected": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "kind": {
+              "Type": "String",
+              "Required": true
+            },
+            "values": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "time_created": {
+        "Type": "String",
+        "Computed": true
+      },
+      "time_updated": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "oci_cloud_guard_detector_recipe": {
@@ -7275,6 +7383,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "is_live_migration_preferred": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
             "recovery_action": {
               "Type": "String",
               "Optional": true,
@@ -7311,6 +7424,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "assign_private_dns_record": {
+              "Type": "Bool",
+              "Optional": true
+            },
             "assign_public_ip": {
               "Type": "String",
               "Optional": true,
@@ -8034,6 +8151,14 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "assign_private_dns_record": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
                         "assign_public_ip": {
                           "Type": "Bool",
                           "Optional": true,
@@ -8377,6 +8502,14 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "assign_private_dns_record": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
                         "assign_public_ip": {
                           "Type": "Bool",
                           "Optional": true,
@@ -10871,6 +11004,14 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "assign_private_dns_record": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
             "assign_public_ip": {
               "Type": "String",
               "Optional": true,
@@ -12410,6 +12551,10 @@
               "Type": "String",
               "Computed": true
             },
+            "graph_studio_url": {
+              "Type": "String",
+              "Computed": true
+            },
             "machine_learning_user_management_url": {
               "Type": "String",
               "Computed": true
@@ -12424,6 +12569,23 @@
       "cpu_core_count": {
         "Type": "Int",
         "Required": true
+      },
+      "customer_contacts": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "email": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "data_safe_status": {
         "Type": "String",
@@ -12882,6 +13044,14 @@
       "compartment_id": {
         "Type": "String",
         "Required": true
+      },
+      "create_async": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "defined_tags": {
         "Type": "Map",
@@ -13612,6 +13782,14 @@
       "cpu_core_count": {
         "Type": "Int",
         "Required": true
+      },
+      "create_async": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "data_storage_percentage": {
         "Type": "Int",
@@ -14952,6 +15130,14 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "create_async": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
             "database": {
               "Type": "List",
               "Required": true,
@@ -15684,6 +15870,14 @@
         "Type": "Int",
         "Computed": true
       },
+      "create_async": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "csi_number": {
         "Type": "String",
         "Computed": true
@@ -15932,6 +16126,10 @@
       "compartment_id": {
         "Type": "String",
         "Required": true
+      },
+      "database_configuration": {
+        "Type": "String",
+        "Computed": true
       },
       "database_edition": {
         "Type": "String",
@@ -16190,6 +16388,10 @@
         "Type": "String",
         "Required": true
       },
+      "database_configuration": {
+        "Type": "String",
+        "Computed": true
+      },
       "database_edition": {
         "Type": "String",
         "Computed": true
@@ -16265,6 +16467,27 @@
         "Type": "String",
         "Computed": true
       },
+      "operations_insights_config": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "operations_insights_connector_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "operations_insights_status": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "state": {
         "Type": "String",
         "Computed": true
@@ -16315,6 +16538,10 @@
       "compartment_id": {
         "Type": "String",
         "Required": true
+      },
+      "database_configuration": {
+        "Type": "String",
+        "Computed": true
       },
       "database_edition": {
         "Type": "String",
@@ -16394,6 +16621,27 @@
       "ncharacter_set": {
         "Type": "String",
         "Computed": true
+      },
+      "operations_insights_config": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "operations_insights_connector_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "operations_insights_status": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       },
       "source_id": {
         "Type": "String",
@@ -16681,6 +16929,125 @@
       "time_updated": {
         "Type": "String",
         "Computed": true
+      }
+    },
+    "oci_database_management_managed_databases_change_database_parameter": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "credentials": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "role": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "user_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "managed_database_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "parameters": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "update_comment": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "scope": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "oci_database_management_managed_databases_reset_database_parameter": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "credentials": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "role": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "user_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "managed_database_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "parameters": {
+        "Type": "List",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "scope": {
+        "Type": "String",
+        "Required": true
       }
     },
     "oci_database_migration": {
@@ -19766,6 +20133,30 @@
       "time_updated": {
         "Type": "String",
         "Computed": true
+      },
+      "trace_config": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "is_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "oci_functions_function": {
@@ -19846,6 +20237,25 @@
         "Type": "Int",
         "Optional": true,
         "Computed": true
+      },
+      "trace_config": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "is_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "oci_functions_invoke_function": {
@@ -27442,6 +27852,11 @@
       },
       "approximate_size": {
         "Type": "String",
+        "Computed": true
+      },
+      "auto_tiering": {
+        "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "bucket_id": {
@@ -39920,6 +40335,298 @@
         "Computed": true
       }
     },
+    "oci_cloud_guard_data_mask_rule": {
+      "compartment_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "data_mask_categories": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "data_mask_rule_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "data_mask_rule_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "defined_tags": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "freeform_tags": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "iam_group_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "lifecyle_details": {
+        "Type": "String",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Computed": true
+      },
+      "system_tags": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "target_selected": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "kind": {
+              "Type": "String",
+              "Computed": true
+            },
+            "values": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "time_created": {
+        "Type": "String",
+        "Computed": true
+      },
+      "time_updated": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "oci_cloud_guard_data_mask_rules": {
+      "access_level": {
+        "Type": "String",
+        "Optional": true
+      },
+      "compartment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "data_mask_rule_collection": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "items": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "compartment_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "data_mask_categories": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "data_mask_rule_status": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "defined_tags": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Value": "String"
+                    }
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "display_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "freeform_tags": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Value": "String"
+                    }
+                  },
+                  "iam_group_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "lifecyle_details": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "state": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "system_tags": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Value": "String"
+                    }
+                  },
+                  "target_selected": {
+                    "Type": "List",
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "kind": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "values": {
+                          "Type": "List",
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "time_created": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "time_updated": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "data_mask_rule_status": {
+        "Type": "String",
+        "Optional": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "iam_group_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true
+      },
+      "target_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "target_type": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "oci_cloud_guard_detector_recipe": {
       "compartment_id": {
         "Type": "String",
@@ -50290,6 +50997,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "is_live_migration_preferred": {
+              "Type": "Bool",
+              "Computed": true
+            },
             "recovery_action": {
               "Type": "String",
               "Computed": true
@@ -50323,6 +51034,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "assign_private_dns_record": {
+              "Type": "Bool",
+              "Computed": true
+            },
             "assign_public_ip": {
               "Type": "String",
               "Computed": true
@@ -50977,6 +51692,10 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "assign_private_dns_record": {
+                          "Type": "Bool",
+                          "Computed": true
+                        },
                         "assign_public_ip": {
                           "Type": "Bool",
                           "Computed": true
@@ -51277,6 +51996,10 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "assign_private_dns_record": {
+                          "Type": "Bool",
+                          "Computed": true
+                        },
                         "assign_public_ip": {
                           "Type": "Bool",
                           "Computed": true
@@ -51679,6 +52402,10 @@
                           "Elem": {
                             "Type": "SchemaInfo",
                             "Info": {
+                              "assign_private_dns_record": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
                               "assign_public_ip": {
                                 "Type": "Bool",
                                 "Computed": true
@@ -51979,6 +52706,10 @@
                           "Elem": {
                             "Type": "SchemaInfo",
                             "Info": {
+                              "assign_private_dns_record": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
                               "assign_public_ip": {
                                 "Type": "Bool",
                                 "Computed": true
@@ -52857,6 +53588,10 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "is_live_migration_preferred": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
                   "recovery_action": {
                     "Type": "String",
                     "Computed": true
@@ -52890,6 +53625,10 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "assign_private_dns_record": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
                   "assign_public_ip": {
                     "Type": "String",
                     "Computed": true
@@ -56484,6 +57223,10 @@
               "Type": "Int",
               "Computed": true
             },
+            "is_live_migration_supported": {
+              "Type": "Bool",
+              "Computed": true
+            },
             "local_disk_description": {
               "Type": "String",
               "Computed": true
@@ -56700,6 +57443,10 @@
             },
             "gpus": {
               "Type": "Int",
+              "Computed": true
+            },
+            "is_live_migration_supported": {
+              "Type": "Bool",
               "Computed": true
             },
             "local_disk_description": {
@@ -58118,7 +58865,7 @@
       },
       "vcn_id": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "vlans": {
         "Type": "List",
@@ -58351,6 +59098,10 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "assign_private_dns_record": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
                   "assign_public_ip": {
                     "Type": "String",
                     "Computed": true
@@ -61266,6 +62017,10 @@
               "Type": "String",
               "Computed": true
             },
+            "graph_studio_url": {
+              "Type": "String",
+              "Computed": true
+            },
             "machine_learning_user_management_url": {
               "Type": "String",
               "Computed": true
@@ -61280,6 +62035,21 @@
       "cpu_core_count": {
         "Type": "Int",
         "Computed": true
+      },
+      "customer_contacts": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "email": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       },
       "data_safe_status": {
         "Type": "String",
@@ -62114,6 +62884,10 @@
                     "Type": "String",
                     "Computed": true
                   },
+                  "graph_studio_url": {
+                    "Type": "String",
+                    "Computed": true
+                  },
                   "machine_learning_user_management_url": {
                     "Type": "String",
                     "Computed": true
@@ -62128,6 +62902,21 @@
             "cpu_core_count": {
               "Type": "Int",
               "Computed": true
+            },
+            "customer_contacts": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "email": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             },
             "data_safe_status": {
               "Type": "String",
@@ -62604,6 +63393,10 @@
                     "Type": "String",
                     "Computed": true
                   },
+                  "graph_studio_url": {
+                    "Type": "String",
+                    "Computed": true
+                  },
                   "machine_learning_user_management_url": {
                     "Type": "String",
                     "Computed": true
@@ -62618,6 +63411,21 @@
             "cpu_core_count": {
               "Type": "Int",
               "Computed": true
+            },
+            "customer_contacts": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "email": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             },
             "data_safe_status": {
               "Type": "String",
@@ -63086,6 +63894,10 @@
         "Type": "String",
         "Computed": true
       },
+      "create_async": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "defined_tags": {
         "Type": "Map",
         "Computed": true,
@@ -63437,6 +64249,10 @@
             },
             "compartment_id": {
               "Type": "String",
+              "Computed": true
+            },
+            "create_async": {
+              "Type": "Bool",
               "Computed": true
             },
             "defined_tags": {
@@ -64818,6 +65634,10 @@
         "Type": "Int",
         "Computed": true
       },
+      "create_async": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "data_storage_percentage": {
         "Type": "Int",
         "Computed": true
@@ -65059,6 +65879,10 @@
             },
             "cpu_core_count": {
               "Type": "Int",
+              "Computed": true
+            },
+            "create_async": {
+              "Type": "Bool",
               "Computed": true
             },
             "data_storage_percentage": {
@@ -68052,6 +68876,10 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "create_async": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
                   "database": {
                     "Type": "List",
                     "Computed": true,
@@ -68858,6 +69686,10 @@
         "Type": "Int",
         "Computed": true
       },
+      "create_async": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "csi_number": {
         "Type": "String",
         "Computed": true
@@ -69139,6 +69971,10 @@
               "Type": "Int",
               "Computed": true
             },
+            "create_async": {
+              "Type": "Bool",
+              "Computed": true
+            },
             "csi_number": {
               "Type": "String",
               "Computed": true
@@ -69416,6 +70252,10 @@
         "Type": "String",
         "Computed": true
       },
+      "database_configuration": {
+        "Type": "String",
+        "Computed": true
+      },
       "database_edition": {
         "Type": "String",
         "Computed": true
@@ -69532,6 +70372,10 @@
               "Computed": true
             },
             "compartment_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "database_configuration": {
               "Type": "String",
               "Computed": true
             },
@@ -69984,6 +70828,10 @@
         "Type": "String",
         "Computed": true
       },
+      "database_configuration": {
+        "Type": "String",
+        "Computed": true
+      },
       "database_edition": {
         "Type": "String",
         "Computed": true
@@ -70065,6 +70913,27 @@
         "Type": "String",
         "Computed": true
       },
+      "operations_insights_config": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "operations_insights_connector_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "operations_insights_status": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "state": {
         "Type": "String",
         "Computed": true
@@ -70100,6 +70969,10 @@
               "Computed": true
             },
             "compartment_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "database_configuration": {
               "Type": "String",
               "Computed": true
             },
@@ -70180,6 +71053,27 @@
               "Type": "String",
               "Computed": true
             },
+            "operations_insights_config": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "operations_insights_connector_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "operations_insights_status": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "state": {
               "Type": "String",
               "Computed": true
@@ -70238,6 +71132,10 @@
         "Computed": true
       },
       "compartment_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "database_configuration": {
         "Type": "String",
         "Computed": true
       },
@@ -70326,6 +71224,27 @@
         "Type": "String",
         "Computed": true
       },
+      "operations_insights_config": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "operations_insights_connector_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "operations_insights_status": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "source_id": {
         "Type": "String",
         "Computed": true
@@ -70369,6 +71288,10 @@
               "Computed": true
             },
             "compartment_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "database_configuration": {
               "Type": "String",
               "Computed": true
             },
@@ -70452,6 +71375,27 @@
             "ncharacter_set": {
               "Type": "String",
               "Computed": true
+            },
+            "operations_insights_config": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "operations_insights_connector_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "operations_insights_status": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             },
             "source_id": {
               "Type": "String",
@@ -71514,6 +72458,361 @@
         }
       },
       "name": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "oci_database_management_managed_databases_database_parameter": {
+      "database_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "database_sub_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "database_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "database_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "is_allowed_values_included": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "items": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allowed_values": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "is_default": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "ordinal": {
+                    "Type": "Float",
+                    "Computed": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "category": {
+              "Type": "String",
+              "Computed": true
+            },
+            "constraint": {
+              "Type": "String",
+              "Computed": true
+            },
+            "container_id": {
+              "Type": "Float",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "display_value": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_adjusted": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_basic": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_default": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_deprecated": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_instance_modifiable": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_modified": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_pdb_modifiable": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_session_modifiable": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_specified": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_system_modifiable": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "number": {
+              "Type": "Float",
+              "Computed": true
+            },
+            "ordinal": {
+              "Type": "Float",
+              "Computed": true
+            },
+            "sid": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "update_comment": {
+              "Type": "String",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "managed_database_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "source": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "oci_database_management_managed_databases_database_parameters": {
+      "database_parameters_collection": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "database_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "database_sub_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "database_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "database_version": {
+              "Type": "String",
+              "Computed": true
+            },
+            "items": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "allowed_values": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "is_default": {
+                          "Type": "Bool",
+                          "Computed": true
+                        },
+                        "ordinal": {
+                          "Type": "Float",
+                          "Computed": true
+                        },
+                        "value": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "category": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "constraint": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "container_id": {
+                    "Type": "Float",
+                    "Computed": true
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "display_value": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_adjusted": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_basic": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_default": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_deprecated": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_instance_modifiable": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_modified": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_pdb_modifiable": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_session_modifiable": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_specified": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_system_modifiable": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "number": {
+                    "Type": "Float",
+                    "Computed": true
+                  },
+                  "ordinal": {
+                    "Type": "Float",
+                    "Computed": true
+                  },
+                  "sid": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "update_comment": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "is_allowed_values_included": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "managed_database_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "source": {
         "Type": "String",
         "Optional": true
       }
@@ -79563,6 +80862,27 @@
       "time_updated": {
         "Type": "String",
         "Computed": true
+      },
+      "trace_config": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "oci_functions_applications": {
@@ -79634,6 +80954,27 @@
             "time_updated": {
               "Type": "String",
               "Computed": true
+            },
+            "trace_config": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "domain_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_enabled": {
+                    "Type": "Bool",
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -79763,6 +81104,23 @@
       "timeout_in_seconds": {
         "Type": "Int",
         "Computed": true
+      },
+      "trace_config": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "is_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "oci_functions_functions": {
@@ -79885,6 +81243,23 @@
             "timeout_in_seconds": {
               "Type": "Int",
               "Computed": true
+            },
+            "trace_config": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "is_enabled": {
+                    "Type": "Bool",
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -99191,6 +100566,10 @@
         "Type": "String",
         "Computed": true
       },
+      "auto_tiering": {
+        "Type": "String",
+        "Computed": true
+      },
       "bucket_id": {
         "Type": "String",
         "Computed": true
@@ -99347,6 +100726,10 @@
               "Computed": true
             },
             "approximate_size": {
+              "Type": "String",
+              "Computed": true
+            },
+            "auto_tiering": {
               "Type": "String",
               "Computed": true
             },

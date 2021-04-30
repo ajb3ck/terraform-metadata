@@ -46,6 +46,7 @@ dns
 dnsimple
 dome9
 dynatrace
+ec
 ecl
 equinix
 exoscale
@@ -84,6 +85,7 @@ netapp-cloudmanager
 netapp-elementsw
 netapp-gcp
 newrelic
+nirmata
 nomad
 ns1
 nsxt
@@ -101,6 +103,7 @@ opc
 opennebula
 opsgenie
 oraclepaas
+outscale
 ovh
 packet
 pagerduty
@@ -121,6 +124,7 @@ sematext
 signalfx
 sigsci
 skytap
+spectrocloud
 splunk
 spotinst
 stackpath

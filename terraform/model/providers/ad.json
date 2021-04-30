@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ad",
   "type": "provider",
-  "version": "v0.4.1",
+  "version": "v0.4.2",
   "provider": {
     "krb_conf": {
       "Type": "String",
@@ -74,6 +74,11 @@
         "Description": "The DN of the container used to hold the computer account.",
         "Computed": true
       },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies a description of the object. This parameter sets the value of the Description property for the computer object."
+      },
       "dn": {
         "Type": "String",
         "Computed": true
@@ -91,6 +96,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "The pre-win2k name for the computer account.",
+        "Computed": true
+      },
+      "sid": {
+        "Type": "String",
+        "Description": "The SID of the computer object.",
         "Computed": true
       }
     },
@@ -580,7 +590,7 @@
       "category": {
         "Type": "String",
         "Optional": true,
-        "Description": "The group's category. Can be one of `system` or `security` (case sensitive).",
+        "Description": "The group's category. Can be one of `distribution` or `security` (case sensitive).",
         "Default": {
           "Type": "string",
           "Value": "security"
@@ -590,6 +600,11 @@
         "Type": "String",
         "Required": true,
         "Description": "A DN of a container object holding the group."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the Group."
       },
       "name": {
         "Type": "String",
@@ -604,11 +619,16 @@
       "scope": {
         "Type": "String",
         "Optional": true,
-        "Description": "The group's scope. Can be one of `global`, `local`, or `universal` (case sensitive).",
+        "Description": "The group's scope. Can be one of `global`, `domainlocal`, or `universal` (case sensitive).",
         "Default": {
           "Type": "string",
           "Value": "global"
         }
+      },
+      "sid": {
+        "Type": "String",
+        "Description": "The SID of the group object.",
+        "Computed": true
       }
     },
     "ad_group_membership": {
@@ -838,6 +858,11 @@
         "Required": true,
         "Description": "The pre-win2k user logon name."
       },
+      "sid": {
+        "Type": "String",
+        "Description": "The SID of the user object.",
+        "Computed": true
+      },
       "smart_card_logon_required": {
         "Type": "Bool",
         "Optional": true,
@@ -894,6 +919,11 @@
         "Type": "String",
         "Description": "The name of the computer object.",
         "Computed": true
+      },
+      "sid": {
+        "Type": "String",
+        "Description": "The SID of the computer object.",
+        "Computed": true
       }
     },
     "ad_gpo": {
@@ -924,6 +954,11 @@
         "Description": "The Group's container object.",
         "Computed": true
       },
+      "description": {
+        "Type": "String",
+        "Description": "Description of the Group object.",
+        "Computed": true
+      },
       "display_name": {
         "Type": "String",
         "Description": "The display name of the Group object.",
@@ -947,6 +982,11 @@
       "scope": {
         "Type": "String",
         "Description": "The Group's scope.",
+        "Computed": true
+      },
+      "sid": {
+        "Type": "String",
+        "Description": "The SID of the group object.",
         "Computed": true
       }
     },
@@ -1106,6 +1146,11 @@
       "sam_account_name": {
         "Type": "String",
         "Description": "The SAM account name of the user object.",
+        "Computed": true
+      },
+      "sid": {
+        "Type": "String",
+        "Description": "The SID of the user object.",
         "Computed": true
       },
       "smart_card_logon_required": {

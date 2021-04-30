@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "alicloud",
   "type": "provider",
-  "version": "v1.121.2",
+  "version": "v1.122.0",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -987,11 +987,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "renewal_status": {
         "Type": "String",
@@ -1155,11 +1151,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "renewal_status": {
         "Type": "String",
@@ -2911,11 +2903,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "status": {
         "Type": "String",
@@ -6125,6 +6113,52 @@
         }
       }
     },
+    "alicloud_cs_kubernetes_permissions": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "permissions": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cluster": {
+              "Type": "String",
+              "Required": true
+            },
+            "is_custom": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "is_ram_role": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "namespace": {
+              "Type": "String",
+              "Optional": true
+            },
+            "role_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "role_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "alicloud_cs_managed_kubernetes": {
       "__timeouts__": [
         "create",
@@ -7607,11 +7641,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "port": {
         "Type": "String",
@@ -8075,17 +8105,35 @@
       }
     },
     "alicloud_disk": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "advanced_features": {
+        "Type": "String",
+        "Optional": true
+      },
       "availability_zone": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "zone_id"
+        ],
+        "Deprecated": "Field 'availability_zone' has been deprecated from provider version 1.122.0. New field 'zone_id' instead"
       },
       "category": {
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "alicloud.DiskCategory",
+          "Type": "string",
           "Value": "cloud_efficiency"
         }
+      },
+      "dedicated_block_storage_cluster_id": {
+        "Type": "String",
+        "Optional": true
       },
       "delete_auto_snapshot": {
         "Type": "Bool",
@@ -8107,6 +8155,18 @@
         "Type": "String",
         "Optional": true
       },
+      "disk_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "dry_run": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "enable_auto_snapshot": {
         "Type": "Bool",
         "Optional": true,
@@ -8115,6 +8175,10 @@
           "Value": "false"
         }
       },
+      "encrypt_algorithm": {
+        "Type": "String",
+        "Optional": true
+      },
       "encrypted": {
         "Type": "Bool",
         "Optional": true,
@@ -8122,13 +8186,28 @@
           "snapshot_id"
         ]
       },
+      "instance_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "kms_key_id": {
         "Type": "String",
         "Optional": true
       },
       "name": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "disk_name"
+        ],
+        "Deprecated": "Field 'name' has been deprecated from provider version 1.122.0. New field 'disk_name' instead."
+      },
+      "payment_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "performance_level": {
         "Type": "String",
@@ -8140,7 +8219,7 @@
       },
       "size": {
         "Type": "Int",
-        "Required": true
+        "Optional": true
       },
       "snapshot_id": {
         "Type": "String",
@@ -8153,17 +8232,59 @@
         "Type": "String",
         "Computed": true
       },
+      "storage_set_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "storage_set_partition_number": {
+        "Type": "Int",
+        "Optional": true
+      },
       "tags": {
         "Type": "Map",
         "Optional": true
-      }
-    },
-    "alicloud_disk_attachment": {
-      "device_name": {
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "offline"
+        }
+      },
+      "zone_id": {
         "Type": "String",
         "Optional": true,
         "Computed": true,
-        "Deprecated": "Attribute device_name is deprecated on disk attachment resource. Suggest to remove it from your template."
+        "ConflictsWith": [
+          "availability_zone"
+        ]
+      }
+    },
+    "alicloud_disk_attachment": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "bootable": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "delete_with_instance": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "device": {
+        "Type": "String",
+        "Computed": true
       },
       "disk_id": {
         "Type": "String",
@@ -8172,6 +8293,14 @@
       "instance_id": {
         "Type": "String",
         "Required": true
+      },
+      "key_pair_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "alicloud_dms_enterprise_instance": {
@@ -9336,6 +9465,16 @@
         }
       }
     },
+    "alicloud_ecs_auto_snapshot_policy_attachment": {
+      "auto_snapshot_policy_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "disk_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "alicloud_ecs_command": {
       "command_content": {
         "Type": "String",
@@ -9489,6 +9628,205 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "alicloud_ecs_disk": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "advanced_features": {
+        "Type": "String",
+        "Optional": true
+      },
+      "availability_zone": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "zone_id"
+        ],
+        "Deprecated": "Field 'availability_zone' has been deprecated from provider version 1.122.0. New field 'zone_id' instead"
+      },
+      "category": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "cloud_efficiency"
+        }
+      },
+      "dedicated_block_storage_cluster_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "delete_auto_snapshot": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "delete_with_instance": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "disk_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "dry_run": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "enable_auto_snapshot": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "encrypt_algorithm": {
+        "Type": "String",
+        "Optional": true
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Optional": true,
+        "ConflictsWith": [
+          "snapshot_id"
+        ]
+      },
+      "instance_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "kms_key_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "disk_name"
+        ],
+        "Deprecated": "Field 'name' has been deprecated from provider version 1.122.0. New field 'disk_name' instead."
+      },
+      "payment_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "performance_level": {
+        "Type": "String",
+        "Optional": true
+      },
+      "resource_group_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "size": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "snapshot_id": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "encrypted"
+        ]
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "storage_set_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "storage_set_partition_number": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "offline"
+        }
+      },
+      "zone_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "availability_zone"
+        ]
+      }
+    },
+    "alicloud_ecs_disk_attachment": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "bootable": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "delete_with_instance": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "device": {
+        "Type": "String",
+        "Computed": true
+      },
+      "disk_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "instance_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "key_pair_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "alicloud_ecs_hpc_cluster": {
@@ -10315,7 +10653,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "1618866208"
+          "Value": "1619813719"
         }
       },
       "post_start": {
@@ -10463,11 +10801,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "resource_group_id": {
         "Type": "String",
@@ -13832,11 +14166,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "period_unit": {
         "Type": "String",
@@ -15128,7 +15458,7 @@
         "Optional": true,
         "Default": {
           "Type": "int64",
-          "Value": "1618866208"
+          "Value": "1619813719"
         }
       },
       "notification_list": {
@@ -16644,11 +16974,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "snat_table_ids": {
         "Type": "String",
@@ -16685,13 +17011,107 @@
       }
     },
     "alicloud_network_acl": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
       "description": {
         "Type": "String",
         "Optional": true
       },
+      "egress_acl_entries": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "destination_cidr_ip": {
+              "Type": "String",
+              "Optional": true
+            },
+            "network_acl_entry_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "policy": {
+              "Type": "String",
+              "Optional": true
+            },
+            "port": {
+              "Type": "String",
+              "Optional": true
+            },
+            "protocol": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "ingress_acl_entries": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "network_acl_entry_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "policy": {
+              "Type": "String",
+              "Optional": true
+            },
+            "port": {
+              "Type": "String",
+              "Optional": true
+            },
+            "protocol": {
+              "Type": "String",
+              "Optional": true
+            },
+            "source_cidr_ip": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
       "name": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "network_acl_name"
+        ],
+        "Deprecated": "Field 'name' has been deprecated from provider version 1.122.0. New field 'network_acl_name' instead"
+      },
+      "network_acl_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
       },
       "vpc_id": {
         "Type": "String",
@@ -17219,7 +17639,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "tf-oss-bucket-20210419210328399400000002"
+          "Value": "tf-oss-bucket-20210430201519841200000002"
         }
       },
       "cors_rule": {
@@ -17928,11 +18348,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "renewal_status": {
         "Type": "String",
@@ -17960,6 +18376,14 @@
       "tags": {
         "Type": "Map",
         "Optional": true
+      },
+      "tde_status": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Disabled"
+        }
       },
       "vswitch_id": {
         "Type": "String",
@@ -20259,11 +20683,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "role": {
         "Type": "String",
@@ -20717,16 +21137,12 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "tf-lb-20210419210328399100000001"
+          "Value": "tf-lb-20210430201519841100000001"
         }
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "resource_group_id": {
         "Type": "String",
@@ -22613,11 +23029,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "resource_group_id": {
         "Type": "String",
@@ -22652,11 +23064,7 @@
       },
       "period": {
         "Type": "Int",
-        "Optional": true,
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Optional": true
       },
       "plan_code": {
         "Type": "String",
@@ -28435,6 +28843,47 @@
         "Optional": true
       }
     },
+    "alicloud_cs_kubernetes_permissions": {
+      "permissions": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "is_owner": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "is_ram_role": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "resource_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "resource_type": {
+              "Type": "String",
+              "Required": true
+            },
+            "role_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "role_type": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "alicloud_cs_managed_kubernetes_clusters": {
       "clusters": {
         "Type": "List",
@@ -29521,7 +29970,41 @@
       }
     },
     "alicloud_disks": {
+      "additional_attributes": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "auto_snapshot_policy_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "availability_zone": {
+        "Type": "String",
+        "Optional": true,
+        "Deprecated": "Field 'availability_zone' has been deprecated from provider version 1.122.0. New field 'zone_id' instead"
+      },
       "category": {
+        "Type": "String",
+        "Optional": true
+      },
+      "delete_auto_snapshot": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "delete_with_instance": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "disk_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "disk_type": {
         "Type": "String",
         "Optional": true
       },
@@ -29537,6 +30020,10 @@
               "Type": "String",
               "Computed": true
             },
+            "auto_snapshot_policy_id": {
+              "Type": "String",
+              "Computed": true
+            },
             "availability_zone": {
               "Type": "String",
               "Computed": true
@@ -29549,6 +30036,14 @@
               "Type": "String",
               "Computed": true
             },
+            "delete_auto_snapshot": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "delete_with_instance": {
+              "Type": "Bool",
+              "Computed": true
+            },
             "description": {
               "Type": "String",
               "Computed": true
@@ -29557,11 +30052,35 @@
               "Type": "String",
               "Computed": true
             },
+            "device": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "enable_auto_snapshot": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "enable_automated_snapshot_policy": {
+              "Type": "Bool",
+              "Computed": true
+            },
             "encrypted": {
               "Type": "String",
               "Computed": true
             },
-            "expiration_time": {
+            "expired_time": {
               "Type": "String",
               "Computed": true
             },
@@ -29577,7 +30096,81 @@
               "Type": "String",
               "Computed": true
             },
+            "iops": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "iops_read": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "iops_write": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "kms_key_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "mount_instance_num": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "mount_instances": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "attached_time": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "device": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "instance_id": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "operation_locks": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "lock_reason": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "payment_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "performance_level": {
+              "Type": "String",
+              "Computed": true
+            },
+            "portable": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "product_code": {
               "Type": "String",
               "Computed": true
             },
@@ -29603,14 +30196,38 @@
             },
             "tags": {
               "Type": "Map",
-              "Optional": true
+              "Computed": true
             },
             "type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "zone_id": {
               "Type": "String",
               "Computed": true
             }
           }
         }
+      },
+      "dry_run": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "enable_auto_snapshot": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enable_automated_snapshot_policy": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "enable_shared": {
+        "Type": "Bool",
+        "Optional": true
       },
       "encrypted": {
         "Type": "String",
@@ -29620,7 +30237,6 @@
         "Type": "List",
         "Optional": true,
         "Computed": true,
-        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -29631,15 +30247,59 @@
         "Type": "String",
         "Optional": true
       },
+      "kms_key_id": {
+        "Type": "String",
+        "Optional": true
+      },
       "name_regex": {
         "Type": "String",
         "Optional": true
+      },
+      "names": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "operation_locks": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "lock_reason": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
       },
       "output_file": {
         "Type": "String",
         "Optional": true
       },
+      "payment_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "portable": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "resource_group_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "snapshot_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "status": {
         "Type": "String",
         "Optional": true
       },
@@ -29648,6 +30308,11 @@
         "Optional": true
       },
       "type": {
+        "Type": "String",
+        "Optional": true,
+        "Deprecated": "Field 'type' has been deprecated from provider version 1.122.0. New field 'disk_type' instead."
+      },
+      "zone_id": {
         "Type": "String",
         "Optional": true
       }
@@ -31822,6 +32487,354 @@
       "tags": {
         "Type": "Map",
         "Optional": true
+      },
+      "zone_id": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "alicloud_ecs_disks": {
+      "additional_attributes": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "auto_snapshot_policy_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "availability_zone": {
+        "Type": "String",
+        "Optional": true,
+        "Deprecated": "Field 'availability_zone' has been deprecated from provider version 1.122.0. New field 'zone_id' instead"
+      },
+      "category": {
+        "Type": "String",
+        "Optional": true
+      },
+      "delete_auto_snapshot": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "delete_with_instance": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "disk_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "disk_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "disks": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "attached_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "auto_snapshot_policy_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "availability_zone": {
+              "Type": "String",
+              "Computed": true
+            },
+            "category": {
+              "Type": "String",
+              "Computed": true
+            },
+            "creation_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "delete_auto_snapshot": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "delete_with_instance": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "detached_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "device": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "enable_auto_snapshot": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "enable_automated_snapshot_policy": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "encrypted": {
+              "Type": "String",
+              "Computed": true
+            },
+            "expired_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "image_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "instance_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "iops": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "iops_read": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "iops_write": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "kms_key_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "mount_instance_num": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "mount_instances": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "attached_time": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "device": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "instance_id": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "operation_locks": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "lock_reason": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "payment_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "performance_level": {
+              "Type": "String",
+              "Computed": true
+            },
+            "portable": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "product_code": {
+              "Type": "String",
+              "Computed": true
+            },
+            "region_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_group_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "size": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "snapshot_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Map",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "zone_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "dry_run": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "enable_auto_snapshot": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enable_automated_snapshot_policy": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "enable_shared": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "encrypted": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ids": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "instance_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "kms_key_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name_regex": {
+        "Type": "String",
+        "Optional": true
+      },
+      "names": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "operation_locks": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "lock_reason": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "payment_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "portable": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "resource_group_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "snapshot_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Deprecated": "Field 'type' has been deprecated from provider version 1.122.0. New field 'disk_type' instead."
       },
       "zone_id": {
         "Type": "String",
@@ -39726,20 +40739,10 @@
             "ip_lists": {
               "Type": "List",
               "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "ComputedBlock",
+              "ConfigImplicitMode": "Attr",
               "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "ip_address": {
-                    "Type": "String",
-                    "Computed": true
-                  },
-                  "snat_entry_enabled": {
-                    "Type": "Bool",
-                    "Computed": true
-                  }
-                }
+                "Type": "SchemaElements",
+                "ElementsType": "String"
               }
             },
             "name": {
@@ -39863,6 +40866,183 @@
       },
       "tags": {
         "Type": "Map",
+        "Optional": true
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "alicloud_network_acls": {
+      "acls": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "egress_acl_entries": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "destination_cidr_ip": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "network_acl_entry_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "policy": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "port": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "protocol": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ingress_acl_entries": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "network_acl_entry_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "policy": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "port": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "protocol": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "source_cidr_ip": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "network_acl_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "network_acl_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resources": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "resource_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "resource_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "status": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "vpc_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ids": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name_regex": {
+        "Type": "String",
+        "Optional": true
+      },
+      "names": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "network_acl_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "resource_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "resource_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "status": {
+        "Type": "String",
         "Optional": true
       },
       "vpc_id": {
@@ -47474,6 +48654,118 @@
             }
           }
         }
+      }
+    },
+    "alicloud_vpc_flow_logs": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "flow_log_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ids": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "log_store_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "logs": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "flow_log_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "flow_log_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "log_store_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "project_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "traffic_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name_regex": {
+        "Type": "String",
+        "Optional": true
+      },
+      "names": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "project_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "resource_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "resource_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true
+      },
+      "traffic_type": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "alicloud_vpcs": {

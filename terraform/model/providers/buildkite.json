@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "buildkite",
   "type": "provider",
-  "version": "v0.3.0",
+  "version": "v0.4.0",
   "provider": {
     "api_token": {
       "Type": "String",
@@ -284,6 +284,17 @@
     }
   },
   "data-sources": {
+    "buildkite_meta": {
+      "webhook_ips": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "buildkite_pipeline": {
       "default_branch": {
         "Type": "String",

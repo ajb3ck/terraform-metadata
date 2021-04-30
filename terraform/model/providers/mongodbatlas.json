@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "mongodbatlas",
   "type": "provider",
-  "version": "v0.8.2",
+  "version": "v0.9.0-pre.1",
   "provider": {
     "private_key": {
       "Type": "String",
@@ -253,6 +253,73 @@
       "iam_assumed_role_arn": {
         "Type": "String",
         "Optional": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "provider_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "role_id": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "mongodbatlas_cloud_provider_access_authorization": {
+      "authorized_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "aws": {
+        "Type": "Map",
+        "Optional": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "feature_usages": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "feature_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "feature_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "role_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "mongodbatlas_cloud_provider_access_setup": {
+      "aws": {
+        "Type": "Map",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "created_date": {
+        "Type": "String",
+        "Computed": true
       },
       "project_id": {
         "Type": "String",
@@ -547,10 +614,39 @@
       "bi_connector": {
         "Type": "Map",
         "Optional": true,
-        "Computed": true,
+        "ConflictsWith": [
+          "bi_connector_config"
+        ],
+        "Deprecated": "use bi_connector_config instead",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "bi_connector_config": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "bi_connector"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "read_preference": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
         }
       },
       "cluster_id": {
@@ -760,6 +856,11 @@
       "provider_encrypt_ebs_volume": {
         "Type": "Bool",
         "Optional": true,
+        "Computed": true,
+        "Deprecated": "All EBS volumes are encrypted by default, the option to disable encryption has been removed"
+      },
+      "provider_encrypt_ebs_volume_flag": {
+        "Type": "Bool",
         "Computed": true
       },
       "provider_instance_size_name": {
@@ -1018,6 +1119,16 @@
         "Required": true
       }
     },
+    "mongodbatlas_custom_dns_configuration_cluster_aws": {
+      "enabled": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "mongodbatlas_database_user": {
       "auth_database_name": {
         "Type": "String",
@@ -1064,11 +1175,21 @@
           }
         }
       },
+      "ldap_auth_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "NONE"
+        }
+      },
       "password": {
         "Type": "String",
         "Optional": true,
         "ConflictsWith": [
-          "x509_type"
+          "x509_type",
+          "ldap_auth_type",
+          "aws_iam_type"
         ]
       },
       "project_id": {
@@ -1222,6 +1343,156 @@
         "Required": true
       }
     },
+    "mongodbatlas_ldap_configuration": {
+      "authentication_enabled": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "authorization_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "authz_query_template": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "bind_password": {
+        "Type": "String",
+        "Required": true
+      },
+      "bind_username": {
+        "Type": "String",
+        "Required": true
+      },
+      "ca_certificate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Required": true
+      },
+      "port": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "636"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "user_to_dn_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ldap_query": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "match": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "substitution": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "mongodbatlas_ldap_verify": {
+      "authz_query_template": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "bind_password": {
+        "Type": "String",
+        "Required": true
+      },
+      "bind_username": {
+        "Type": "String",
+        "Required": true
+      },
+      "ca_certificate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Required": true
+      },
+      "links": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rel": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "port": {
+        "Type": "Int",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "request_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "validations": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "validation_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "mongodbatlas_maintenance_window": {
       "day_of_week": {
         "Type": "Int",
@@ -1301,6 +1572,15 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "regions": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "vnet_name": {
         "Type": "String",
@@ -2160,6 +2440,32 @@
         "Required": true
       }
     },
+    "mongodbatlas_cloud_provider_access_setup": {
+      "aws": {
+        "Type": "Map",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "created_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "provider_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "role_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "mongodbatlas_cloud_provider_snapshot": {
       "cluster_name": {
         "Type": "String",
@@ -2560,9 +2866,30 @@
       "bi_connector": {
         "Type": "Map",
         "Computed": true,
+        "Deprecated": "use bi_connector_config instead",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "bi_connector_config": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "read_preference": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
         }
       },
       "cluster_type": {
@@ -2951,9 +3278,30 @@
             "bi_connector": {
               "Type": "Map",
               "Computed": true,
+              "Deprecated": "use bi_connector_config instead",
               "Elem": {
                 "Type": "SchemaElements",
                 "ElementsType": "String"
+              }
+            },
+            "bi_connector_config": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "read_preference": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
               }
             },
             "cluster_type": {
@@ -3450,6 +3798,16 @@
         }
       }
     },
+    "mongodbatlas_custom_dns_configuration_cluster_aws": {
+      "enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "mongodbatlas_database_user": {
       "auth_database_name": {
         "Type": "String",
@@ -3488,6 +3846,10 @@
             }
           }
         }
+      },
+      "ldap_auth_type": {
+        "Type": "String",
+        "Computed": true
       },
       "project_id": {
         "Type": "String",
@@ -3583,6 +3945,10 @@
                   }
                 }
               }
+            },
+            "ldap_auth_type": {
+              "Type": "String",
+              "Computed": true
             },
             "project_id": {
               "Type": "String",
@@ -3680,6 +4046,131 @@
         "Required": true
       }
     },
+    "mongodbatlas_ldap_configuration": {
+      "authentication_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "authorization_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "authz_query_template": {
+        "Type": "String",
+        "Computed": true
+      },
+      "bind_password": {
+        "Type": "String",
+        "Computed": true
+      },
+      "bind_username": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ca_certificate": {
+        "Type": "String",
+        "Computed": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Computed": true
+      },
+      "port": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "user_to_dn_mapping": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ldap_query": {
+              "Type": "String",
+              "Computed": true
+            },
+            "match": {
+              "Type": "String",
+              "Computed": true
+            },
+            "substitution": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "mongodbatlas_ldap_verify": {
+      "bind_username": {
+        "Type": "String",
+        "Computed": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Computed": true
+      },
+      "links": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rel": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "port": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "request_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "validations": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "validation_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "mongodbatlas_maintenance_window": {
       "day_of_week": {
         "Type": "Int",
@@ -3743,6 +4234,15 @@
         "Type": "String",
         "Computed": true
       },
+      "regions": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "vnet_name": {
         "Type": "String",
         "Computed": true
@@ -3804,6 +4304,15 @@
             "region_name": {
               "Type": "String",
               "Computed": true
+            },
+            "regions": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "vnet_name": {
               "Type": "String",

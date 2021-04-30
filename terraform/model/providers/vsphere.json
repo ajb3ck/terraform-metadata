@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "vsphere",
   "type": "provider",
-  "version": "v1.25.0",
+  "version": "v1.26.0",
   "provider": {
     "allow_unverified_ssl": {
       "Type": "Bool",
@@ -2088,7 +2088,7 @@
       "version": {
         "Type": "String",
         "Optional": true,
-        "Description": "The version of this virtual switch. Allowed versions are 6.5.0, 6.0.0, 5.5.0, 5.1.0, and 5.0.0.",
+        "Description": "The version of this virtual switch. Allowed versions are 7.0.0, 6.5.0, 6.0.0, 5.5.0, 5.1.0, and 5.0.0.",
         "Computed": true
       },
       "virtualmachine_maximum_mbit": {

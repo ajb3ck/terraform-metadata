@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "equinix",
   "type": "provider",
-  "version": "v1.1.0-beta",
+  "version": "v1.2.0",
   "provider": {
     "client_id": {
       "Type": "String",
@@ -760,6 +760,11 @@
         "Optional": true,
         "Description": "Additional Internet bandwidth, in Mbps, that will be allocated to the device"
       },
+      "asn": {
+        "Type": "Int",
+        "Description": "Autonomous system number",
+        "Computed": true
+      },
       "byol": {
         "Type": "Bool",
         "Optional": true,
@@ -941,6 +946,11 @@
               "Optional": true,
               "Description": "Additional Internet bandwidth, in Mbps, that will be allocated to the device"
             },
+            "asn": {
+              "Type": "Int",
+              "Description": "Autonomous system number",
+              "Computed": true
+            },
             "hostname": {
               "Type": "String",
               "Optional": true,
@@ -1115,6 +1125,11 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "zone_code": {
+              "Type": "String",
+              "Description": "Device location zone code",
+              "Computed": true
             }
           }
         }
@@ -1206,6 +1221,121 @@
         "Type": "String",
         "Required": true,
         "Description": "Device software software version"
+      },
+      "zone_code": {
+        "Type": "String",
+        "Description": "Device location zone code",
+        "Computed": true
+      }
+    },
+    "equinix_network_device_link": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "device": {
+        "Type": "Set",
+        "Required": true,
+        "MinItems": 2,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "asn": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Device ASN number"
+            },
+            "id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Device identifier"
+            },
+            "interface_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Device network interface identifier to use for device link connection"
+            },
+            "ip_address": {
+              "Type": "String",
+              "Description": "Assigned IP address from device link subnet",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "Device link connection provisioning status",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "link": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "link",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "account_number": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Billing account number to be used for connection charges"
+            },
+            "dst_metro_code": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Connection destination metro code"
+            },
+            "dst_zone_code": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Connection destination zone code"
+            },
+            "src_metro_code": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Connection source metro code"
+            },
+            "src_zone_code": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Connection source zone code"
+            },
+            "throughput": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Connection throughput"
+            },
+            "throughput_unit": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Connection throughput unit"
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "name"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Device link provisioning status",
+        "Computed": true
+      },
+      "subnet": {
+        "Type": "String",
+        "Required": true,
+        "Description": "subnet"
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "Device link unique identifier",
+        "Computed": true
       }
     },
     "equinix_network_ssh_key": {

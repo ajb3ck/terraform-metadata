@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "databricks",
   "type": "provider",
-  "version": "v0.3.2",
+  "version": "v0.3.3",
   "provider": {
     "azure_client_id": {
       "Type": "String",
@@ -859,6 +859,10 @@
         "ConflictsWith": [
           "source"
         ]
+      },
+      "dbfs_path": {
+        "Type": "String",
+        "Computed": true
       },
       "file_size": {
         "Type": "Int",
@@ -2089,6 +2093,10 @@
         "Type": "String",
         "Required": true
       },
+      "public_access_enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "region": {
         "Type": "String",
         "Required": true
@@ -3039,6 +3047,21 @@
         "Computed": true
       }
     },
+    "databricks_sql_dashboard": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "databricks_sql_endpoint": {
       "auto_stop_mins": {
         "Type": "Int",
@@ -3047,6 +3070,11 @@
       "cluster_size": {
         "Type": "String",
         "Required": true
+      },
+      "data_source_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "enable_photon": {
         "Type": "Bool",
@@ -3150,6 +3178,563 @@
             }
           }
         }
+      }
+    },
+    "databricks_sql_permissions": {
+      "anonymous_function": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "any_file": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "catalog": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "database": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
+      },
+      "privilege_assignments": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "principal": {
+              "Type": "String",
+              "Required": true
+            },
+            "privileges": {
+              "Type": "Set",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "table": {
+        "Type": "String",
+        "Optional": true
+      },
+      "view": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "databricks_sql_query": {
+      "data_source_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "parameter": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "date": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "date_range": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "datetime": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "datetime_range": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "datetimesec": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "datetimesec_range": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "enum": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "multiple": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "prefix": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "separator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "suffix": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "options": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "values": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "number": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "Float",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "query": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "multiple": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "prefix": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "separator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "suffix": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "query_id": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "values": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "text": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "title": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "query": {
+        "Type": "String",
+        "Required": true
+      },
+      "schedule": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "continuous": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "ConflictsWith": [
+                "schedule.0.daily",
+                "schedule.0.weekly"
+              ],
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "interval_seconds": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "until_date": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "daily": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "ConflictsWith": [
+                "schedule.0.continuous",
+                "schedule.0.weekly"
+              ],
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "interval_days": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "time_of_day": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "until_date": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "weekly": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "ConflictsWith": [
+                "schedule.0.continuous",
+                "schedule.0.daily"
+              ],
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "day_of_week": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "interval_weeks": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "time_of_day": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "until_date": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "databricks_sql_visualization": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "options": {
+        "Type": "String",
+        "Required": true
+      },
+      "query_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "visualization_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "databricks_sql_widget": {
+      "dashboard_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "parameter": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "map_to": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "title": {
+              "Type": "String",
+              "Optional": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            },
+            "value": {
+              "Type": "String",
+              "Optional": true
+            },
+            "values": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "position": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "pos_x": {
+              "Type": "Int",
+              "Required": true
+            },
+            "pos_y": {
+              "Type": "Int",
+              "Required": true
+            },
+            "size_x": {
+              "Type": "Int",
+              "Required": true
+            },
+            "size_y": {
+              "Type": "Int",
+              "Required": true
+            }
+          }
+        }
+      },
+      "text": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "visualization_id"
+        ]
+      },
+      "visualization_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "widget_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "databricks_token": {

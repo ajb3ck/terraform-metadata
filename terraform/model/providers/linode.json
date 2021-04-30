@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "linode",
   "type": "provider",
-  "version": "v1.17.0",
+  "version": "v1.17.1",
   "provider": {
     "api_version": {
       "Type": "String",
@@ -485,6 +485,7 @@
       "alerts": {
         "Type": "List",
         "Optional": true,
+        "Description": "Configuration options for alert triggers on this Linode.",
         "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
@@ -650,6 +651,7 @@
                   "sda": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -679,6 +681,7 @@
                   "sdb": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -708,6 +711,7 @@
                   "sdc": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -737,6 +741,7 @@
                   "sdd": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -766,6 +771,7 @@
                   "sde": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -795,6 +801,7 @@
                   "sdf": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -824,6 +831,7 @@
                   "sdg": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -853,6 +861,7 @@
                   "sdh": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                     "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
@@ -1141,6 +1150,7 @@
       },
       "specs": {
         "Type": "List",
+        "Description": "Information about the resources available to this Linode.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -1403,6 +1413,7 @@
       },
       "created": {
         "Type": "String",
+        "Description": "When this NodeBalancer was created.",
         "Computed": true
       },
       "hostname": {
@@ -1443,6 +1454,7 @@
       },
       "transfer": {
         "Type": "List",
+        "Description": "Information about the amount of transfer this NodeBalancer has had so far this month.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -1469,6 +1481,7 @@
       },
       "updated": {
         "Type": "String",
+        "Description": "When this NodeBalancer was last updated.",
         "Computed": true
       }
     },
@@ -1529,6 +1542,7 @@
       },
       "node_status": {
         "Type": "List",
+        "Description": "A structure containing information about the health of the backends for this port. This information is updated periodically as checks are performed against backends.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -1649,7 +1663,8 @@
     "linode_object_storage_bucket": {
       "access_key": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The S3 access key to use for this resource. (Required for lifecycle_rule and versioning)"
       },
       "acl": {
         "Type": "String",
@@ -1663,6 +1678,7 @@
       "cert": {
         "Type": "List",
         "Optional": true,
+        "Description": "The cert used by this Object Storage Bucket.",
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1782,7 +1798,8 @@
       },
       "secret_key": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The S3 secret key to use for this resource. (Required for lifecycle_rule and versioning)"
       },
       "versioning": {
         "Type": "Bool",
@@ -1800,6 +1817,7 @@
       "bucket_access": {
         "Type": "List",
         "Optional": true,
+        "Description": "A list of permissions to grant this limited access key.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -1842,11 +1860,13 @@
     "linode_object_storage_object": {
       "access_key": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The S3 access key with access to the target bucket."
       },
       "acl": {
         "Type": "String",
         "Optional": true,
+        "Description": "The ACL config given to this object.",
         "Default": {
           "Type": "string",
           "Value": "private"
@@ -1854,49 +1874,60 @@
       },
       "bucket": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The target bucket to put this object in."
       },
       "cache_control": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "This cache_control configuration of this object."
       },
       "cluster": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The target cluster that the bucket is in."
       },
       "content": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The contents of the Object to upload."
       },
       "content_base64": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The base64 contents of the Object to upload."
       },
       "content_disposition": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The content disposition configuration of this object."
       },
       "content_encoding": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The encoding of the content of this object."
       },
       "content_language": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The language metadata of this object."
       },
       "content_type": {
         "Type": "String",
         "Optional": true,
+        "Description": "The MIME type of the content.",
         "Computed": true
       },
       "etag": {
         "Type": "String",
         "Optional": true,
+        "Description": "The specific version of this object.",
         "Computed": true
       },
       "force_destroy": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "Whether the object should bypass deletion restrictions.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -1904,11 +1935,13 @@
       },
       "key": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The name of the uploaded object."
       },
       "metadata": {
         "Type": "Map",
         "Optional": true,
+        "Description": "The metadata of this object",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1917,19 +1950,23 @@
       },
       "secret_key": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The S3 secret key with access to the target bucket."
       },
       "source": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The source file to upload."
       },
       "version_id": {
         "Type": "String",
+        "Description": "The version ID of this object.",
         "Computed": true
       },
       "website_redirect": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The website redirect location of this object."
       }
     },
     "linode_rdns": {
@@ -2032,26 +2069,32 @@
           "Info": {
             "default": {
               "Type": "String",
+              "Description": "The default value. If not specified, this value will be used.",
               "Computed": true
             },
             "example": {
               "Type": "String",
+              "Description": "An example value for the field.",
               "Computed": true
             },
             "label": {
               "Type": "String",
+              "Description": "A human-readable label for the field that will serve as the input prompt for entering the value during deployment.",
               "Computed": true
             },
             "many_of": {
               "Type": "String",
+              "Description": "A list of acceptable values for the field in any quantity, combination or order.",
               "Computed": true
             },
             "name": {
               "Type": "String",
+              "Description": "The name of the field.",
               "Computed": true
             },
             "one_of": {
               "Type": "String",
+              "Description": "A list of acceptable single values for the field.",
               "Computed": true
             }
           }
@@ -2099,6 +2142,7 @@
       "domain_grant": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A set containing all of the user's active grants.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2226,6 +2270,7 @@
       "image_grant": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A set containing all of the user's active grants.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2248,6 +2293,7 @@
       "linode_grant": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A set containing all of the user's active grants.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2270,6 +2316,7 @@
       "longview_grant": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A set containing all of the user's active grants.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2292,6 +2339,7 @@
       "nodebalancer_grant": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A set containing all of the user's active grants.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2333,6 +2381,7 @@
       "stackscript_grant": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A set containing all of the user's active grants.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2365,6 +2414,7 @@
       "volume_grant": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A set containing all of the user's active grants.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2582,7 +2632,8 @@
       },
       "id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The unique ID assigned to this domain"
       },
       "master_ips": {
         "Type": "Set",
@@ -2643,7 +2694,8 @@
       },
       "id": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "The unique ID assigned to this domain record."
       },
       "name": {
         "Type": "String",
@@ -2741,7 +2793,8 @@
       },
       "id": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "The unique ID assigned to this Firewall."
       },
       "inbound": {
         "Type": "List",
@@ -2916,7 +2969,8 @@
       },
       "id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The unique ID assigned to this Image."
       },
       "is_public": {
         "Type": "Bool",
@@ -2973,6 +3027,7 @@
       },
       "images": {
         "Type": "List",
+        "Description": "The returned list of Images.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -3006,7 +3061,8 @@
             },
             "id": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The unique ID assigned to this Image."
             },
             "is_public": {
               "Type": "Bool",
@@ -3354,7 +3410,8 @@
       },
       "id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The unique ID assigned to this Instance type."
       },
       "label": {
         "Type": "String",
@@ -3434,6 +3491,7 @@
       },
       "instances": {
         "Type": "List",
+        "Description": "The returned list of Instances.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -3452,7 +3510,7 @@
                 "Info": {
                   "cpu": {
                     "Type": "Int",
-                    "Description": "The percentage of CPU usage required to trigger an alert. If the average CPU usage over two hours exceeds this value, we'll send you an alert. If this is set to 0, the alert is disabled.",
+                    "Description": "The percentage of CPU usage required to trigger an alert. If the average CPU usage over two hours exceeds this value, we'll Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.send you an alert. If this is set to 0, the alert is disabled.",
                     "Computed": true
                   },
                   "io": {
@@ -3573,6 +3631,7 @@
                         },
                         "sdb": {
                           "Type": "List",
+                          "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                           "Computed": true,
                           "IsBlock": true,
                           "ConfigImplicitMode": "ComputedBlock",
@@ -3600,6 +3659,7 @@
                         },
                         "sdc": {
                           "Type": "List",
+                          "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                           "Computed": true,
                           "IsBlock": true,
                           "ConfigImplicitMode": "ComputedBlock",
@@ -3627,6 +3687,7 @@
                         },
                         "sdd": {
                           "Type": "List",
+                          "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                           "Computed": true,
                           "IsBlock": true,
                           "ConfigImplicitMode": "ComputedBlock",
@@ -3654,6 +3715,7 @@
                         },
                         "sde": {
                           "Type": "List",
+                          "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                           "Computed": true,
                           "IsBlock": true,
                           "ConfigImplicitMode": "ComputedBlock",
@@ -3681,6 +3743,7 @@
                         },
                         "sdf": {
                           "Type": "List",
+                          "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                           "Computed": true,
                           "IsBlock": true,
                           "ConfigImplicitMode": "ComputedBlock",
@@ -3708,6 +3771,7 @@
                         },
                         "sdg": {
                           "Type": "List",
+                          "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                           "Computed": true,
                           "IsBlock": true,
                           "ConfigImplicitMode": "ComputedBlock",
@@ -3735,6 +3799,7 @@
                         },
                         "sdh": {
                           "Type": "List",
+                          "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
                           "Computed": true,
                           "IsBlock": true,
                           "ConfigImplicitMode": "ComputedBlock",
@@ -3835,6 +3900,7 @@
             },
             "disk": {
               "Type": "List",
+              "Description": "Disks associated with this Linode.",
               "Computed": true,
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
@@ -3952,6 +4018,7 @@
             },
             "tags": {
               "Type": "Set",
+              "Description": "The tags assigned to this Instance.",
               "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
@@ -3986,7 +4053,8 @@
       },
       "id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The unique ID of this Kernel."
       },
       "kvm": {
         "Type": "Bool",
@@ -4027,7 +4095,8 @@
       },
       "id": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "The unique ID of this LKE Cluster."
       },
       "k8s_version": {
         "Type": "String",
@@ -4174,6 +4243,7 @@
       },
       "created": {
         "Type": "String",
+        "Description": "When this NodeBalancer was created.",
         "Computed": true
       },
       "hostname": {
@@ -4218,6 +4288,7 @@
       },
       "transfer": {
         "Type": "List",
+        "Description": "Information about the amount of transfer this NodeBalancer has had so far this month.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -4244,6 +4315,7 @@
       },
       "updated": {
         "Type": "String",
+        "Description": "When this NodeBalancer was last updated.",
         "Computed": true
       }
     },
@@ -4300,6 +4372,7 @@
       },
       "node_status": {
         "Type": "List",
+        "Description": "A structure containing information about the health of the backends for this port. This information is updated periodically as checks are performed against backends.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -4575,7 +4648,8 @@
       },
       "id": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "The unique ID of this Stackscript."
       },
       "images": {
         "Type": "List",
@@ -4623,26 +4697,32 @@
           "Info": {
             "default": {
               "Type": "String",
+              "Description": "The default value. If not specified, this value will be used.",
               "Computed": true
             },
             "example": {
               "Type": "String",
+              "Description": "An example value for the field.",
               "Computed": true
             },
             "label": {
               "Type": "String",
+              "Description": "A human-readable label for the field that will serve as the input prompt for entering the value during deployment.",
               "Computed": true
             },
             "many_of": {
               "Type": "String",
+              "Description": "A list of acceptable values for the field in any quantity, combination or order.",
               "Computed": true
             },
             "name": {
               "Type": "String",
+              "Description": "The name of the field.",
               "Computed": true
             },
             "one_of": {
               "Type": "String",
+              "Description": "A list of acceptable single values for the field.",
               "Computed": true
             }
           }

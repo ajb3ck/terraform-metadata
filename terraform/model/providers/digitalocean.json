@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "digitalocean",
   "type": "provider",
-  "version": "v2.7.0",
+  "version": "v2.8.0",
   "provider": {
     "api_endpoint": {
       "Type": "String",
@@ -1261,7 +1261,7 @@
         "Computed": true
       },
       "regions": {
-        "Type": "List",
+        "Type": "Set",
         "Required": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -4370,6 +4370,65 @@
         "Computed": true
       },
       "version": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "digitalocean_database_replica": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "database": {
+        "Type": "String",
+        "Computed": true
+      },
+      "host": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "password": {
+        "Type": "String",
+        "Computed": true
+      },
+      "port": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "private_host": {
+        "Type": "String",
+        "Computed": true
+      },
+      "private_network_uuid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "private_uri": {
+        "Type": "String",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uri": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user": {
         "Type": "String",
         "Computed": true
       }

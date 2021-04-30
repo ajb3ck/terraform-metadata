@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "spotinst",
   "type": "provider",
-  "version": "v1.38.0",
+  "version": "v1.42.0",
   "provider": {
     "account": {
       "Type": "String",

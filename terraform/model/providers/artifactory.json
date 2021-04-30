@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "artifactory",
   "type": "provider",
-  "version": "v2.2.11",
+  "version": "v2.2.12",
   "provider": {
     "access_token": {
       "Type": "String",
@@ -1698,6 +1698,11 @@
             "name": {
               "Type": "String",
               "Required": true
+            },
+            "repo_type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "type": {
               "Type": "String",

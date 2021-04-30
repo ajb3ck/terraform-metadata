@@ -3,6 +3,10 @@ azurerm
 dynatrace
 intersight
 kubernetes-alpha
+nirmata
+ns1
+outscale
+spectrocloud
 tencentcloud
 terraform
 thunder

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "brightbox",
   "type": "provider",
-  "version": "v2.0.3",
+  "version": "v2.0.4",
   "provider": {
     "account": {
       "Type": "String",

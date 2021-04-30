@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "aiven",
   "type": "provider",
-  "version": "v2.1.11",
+  "version": "v2.1.12",
   "provider": {
     "api_token": {
       "Type": "String",
@@ -5475,6 +5475,14 @@
                 "Type": "string"
               }
             },
+            "binlog_retention_period": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.",
+              "Default": {
+                "Type": "string"
+              }
+            },
             "ip_filter": {
               "Type": "List",
               "Optional": true,
@@ -5779,6 +5787,14 @@
                       "Type": "string"
                     }
                   },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
                   "prometheus": {
                     "Type": "String",
                     "Optional": true,
@@ -5804,6 +5820,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Enable mysql",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Enable mysqlx",
                     "Default": {
                       "Type": "string"
                     }
@@ -5833,6 +5857,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Allow clients to connect to mysql from the public internet for service nodes that are in a project VPC or another type of private network",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx from the public internet for service nodes that are in a project VPC or another type of private network",
                     "Default": {
                       "Type": "string"
                     }
@@ -6499,6 +6531,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "track_functions",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "track_io_timing": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "track_io_timing",
                     "Default": {
                       "Type": "string"
                     }
@@ -10263,6 +10303,14 @@
                 "Type": "string"
               }
             },
+            "binlog_retention_period": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.",
+              "Default": {
+                "Type": "string"
+              }
+            },
             "ip_filter": {
               "Type": "List",
               "Optional": true,
@@ -10567,6 +10615,14 @@
                       "Type": "string"
                     }
                   },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
                   "prometheus": {
                     "Type": "String",
                     "Optional": true,
@@ -10592,6 +10648,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Enable mysql",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Enable mysqlx",
                     "Default": {
                       "Type": "string"
                     }
@@ -10621,6 +10685,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Allow clients to connect to mysql from the public internet for service nodes that are in a project VPC or another type of private network",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx from the public internet for service nodes that are in a project VPC or another type of private network",
                     "Default": {
                       "Type": "string"
                     }
@@ -11135,6 +11207,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "track_functions",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "track_io_timing": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "track_io_timing",
                     "Default": {
                       "Type": "string"
                     }
@@ -11933,6 +12013,14 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "max_jmx_metrics": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Maximum number of JMX metrics to send",
+              "Default": {
+                "Type": "string"
+              }
             }
           }
         }
@@ -11966,7 +12054,67 @@
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
-          "Type": "SchemaInfo"
+          "Type": "SchemaInfo",
+          "Info": {
+            "dropped_metrics": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Metrics to not send to AWS CloudWatch (takes precedence over extra_metrics)",
+              "MaxItems": 1024,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of a value in the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "metric": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "extra_metrics": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Metrics to allow through to AWS CloudWatch (in addition to default metrics)",
+              "MaxItems": 1024,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of a value in the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "metric": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "external_elasticsearch_logs_user_config": {
@@ -18737,6 +18885,14 @@
                 "Type": "string"
               }
             },
+            "binlog_retention_period": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.",
+              "Default": {
+                "Type": "string"
+              }
+            },
             "ip_filter": {
               "Type": "List",
               "Optional": true,
@@ -19041,6 +19197,14 @@
                       "Type": "string"
                     }
                   },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
                   "prometheus": {
                     "Type": "String",
                     "Optional": true,
@@ -19066,6 +19230,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Enable mysql",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Enable mysqlx",
                     "Default": {
                       "Type": "string"
                     }
@@ -19095,6 +19267,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Allow clients to connect to mysql from the public internet for service nodes that are in a project VPC or another type of private network",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx from the public internet for service nodes that are in a project VPC or another type of private network",
                     "Default": {
                       "Type": "string"
                     }
@@ -19764,6 +19944,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "track_functions",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "track_io_timing": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "track_io_timing",
                     "Default": {
                       "Type": "string"
                     }
@@ -23529,6 +23717,14 @@
                 "Type": "string"
               }
             },
+            "binlog_retention_period": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.",
+              "Default": {
+                "Type": "string"
+              }
+            },
             "ip_filter": {
               "Type": "List",
               "Optional": true,
@@ -23833,6 +24029,14 @@
                       "Type": "string"
                     }
                   },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
                   "prometheus": {
                     "Type": "String",
                     "Optional": true,
@@ -23858,6 +24062,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Enable mysql",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Enable mysqlx",
                     "Default": {
                       "Type": "string"
                     }
@@ -23887,6 +24099,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Allow clients to connect to mysql from the public internet for service nodes that are in a project VPC or another type of private network",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "mysqlx": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Allow clients to connect to mysqlx from the public internet for service nodes that are in a project VPC or another type of private network",
                     "Default": {
                       "Type": "string"
                     }
@@ -24401,6 +24621,14 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "track_functions",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "track_io_timing": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "track_io_timing",
                     "Default": {
                       "Type": "string"
                     }
@@ -25256,6 +25484,14 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "max_jmx_metrics": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Maximum number of JMX metrics to send",
+              "Default": {
+                "Type": "string"
+              }
             }
           }
         }
@@ -25289,7 +25525,67 @@
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
-          "Type": "SchemaInfo"
+          "Type": "SchemaInfo",
+          "Info": {
+            "dropped_metrics": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Metrics to not send to AWS CloudWatch (takes precedence over extra_metrics)",
+              "MaxItems": 1024,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of a value in the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "metric": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "extra_metrics": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Metrics to allow through to AWS CloudWatch (in addition to default metrics)",
+              "MaxItems": 1024,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of a value in the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "metric": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identifier of the metric",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "external_elasticsearch_logs_user_config": {

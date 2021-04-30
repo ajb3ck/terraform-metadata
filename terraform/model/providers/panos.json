@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "panos",
   "type": "provider",
-  "version": "v1.8.2",
+  "version": "v1.8.3",
   "provider": {
     "api_key": {
       "Type": "String",

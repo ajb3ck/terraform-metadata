@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "octopusdeploy",
   "type": "provider",
-  "version": "v0.7.28",
+  "version": "v0.7.36",
   "provider": {
     "address": {
       "Type": "String",
@@ -2995,20 +2995,36 @@
                     }
                   },
                   "template": {
-                    "Type": "String",
-                    "Optional": true
+                    "Type": "Set",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "additional_variable_files": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "directory": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "run_automatic_file_substitution": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "target_files": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
                   },
                   "template_parameters": {
                     "Type": "String",
                     "Optional": true
-                  },
-                  "template_source": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Default": {
-                      "Type": "string",
-                      "Value": "Inline"
-                    }
                   },
                   "tenant_tags": {
                     "Type": "List",
@@ -9582,13 +9598,24 @@
         "Required": true,
         "Description": "The name of this resource."
       },
+      "owner_id": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "project_id"
+        ]
+      },
       "pgp_key": {
         "Type": "String",
         "Optional": true
       },
       "project_id": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "ConflictsWith": [
+          "owner_id"
+        ],
+        "Deprecated": "This attribute is deprecated; please use owner_id instead."
       },
       "prompt": {
         "Type": "Set",
@@ -9664,45 +9691,6 @@
                 "ElementsType": "String"
               }
             },
-            "parent_deployments": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "A list of parent deployments that are scoped to this variable value.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "private": {
-              "Type": "List",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "process_owners": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "A list of process owners that are scoped to this variable value.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "projects": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "A list of projects that are scoped to this variable value.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
             "roles": {
               "Type": "List",
               "Optional": true,
@@ -9713,50 +9701,10 @@
                 "ElementsType": "String"
               }
             },
-            "target_roles": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "A list of target roles that are scoped to this variable value.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
             "tenant_tags": {
               "Type": "List",
               "Optional": true,
               "Description": "A list of tenant tags that are scoped to this variable value.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "tenants": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "A list of tenants that are scoped to this variable value.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "triggers": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "A list of triggers that are scoped to this variable value.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "users": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "A list of users that are scoped to this variable value.",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -17585,13 +17533,18 @@
               "Description": "The name of this resource.",
               "Computed": true
             },
+            "owner_id": {
+              "Type": "String",
+              "Computed": true
+            },
             "pgp_key": {
               "Type": "String",
               "Computed": true
             },
             "project_id": {
               "Type": "String",
-              "Computed": true
+              "Computed": true,
+              "Deprecated": "This attribute is deprecated; please use owner_id instead."
             },
             "prompt": {
               "Type": "Set",
@@ -17665,45 +17618,6 @@
                       "ElementsType": "String"
                     }
                   },
-                  "parent_deployments": {
-                    "Type": "List",
-                    "Optional": true,
-                    "Description": "A list of parent deployments that are scoped to this variable value.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "private": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "process_owners": {
-                    "Type": "List",
-                    "Optional": true,
-                    "Description": "A list of process owners that are scoped to this variable value.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "projects": {
-                    "Type": "List",
-                    "Optional": true,
-                    "Description": "A list of projects that are scoped to this variable value.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
                   "roles": {
                     "Type": "List",
                     "Optional": true,
@@ -17714,50 +17628,10 @@
                       "ElementsType": "String"
                     }
                   },
-                  "target_roles": {
-                    "Type": "List",
-                    "Optional": true,
-                    "Description": "A list of target roles that are scoped to this variable value.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
                   "tenant_tags": {
                     "Type": "List",
                     "Optional": true,
                     "Description": "A list of tenant tags that are scoped to this variable value.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "tenants": {
-                    "Type": "List",
-                    "Optional": true,
-                    "Description": "A list of tenants that are scoped to this variable value.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "triggers": {
-                    "Type": "List",
-                    "Optional": true,
-                    "Description": "A list of triggers that are scoped to this variable value.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "users": {
-                    "Type": "List",
-                    "Optional": true,
-                    "Description": "A list of users that are scoped to this variable value.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "gridscale",
   "type": "provider",
-  "version": "v1.9.0",
+  "version": "v1.9.1",
   "provider": {
     "api_url": {
       "Type": "String",

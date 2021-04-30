@@ -3,7 +3,7 @@
   ".sdk_type": "terraform",
   "name": "netapp-cloudmanager",
   "type": "provider",
-  "version": "v21.3.0",
+  "version": "v21.4.0",
   "provider": {
     "environment": {
       "Type": "String",

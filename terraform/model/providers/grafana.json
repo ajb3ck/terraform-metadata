@@ -1,50 +1,50 @@
 {
   ".schema_version": "2",
-  ".sdk_type": "terraform",
+  ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "grafana",
   "type": "provider",
-  "version": "v1.9.0",
+  "version": "v1.10.0",
   "provider": {
     "auth": {
       "Type": "String",
       "Required": true,
-      "Description": "Credentials for accessing the Grafana API.",
+      "Description": "API token or basic auth username:password. May alternatively be set via the `GRAFANA_AUTH` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_AUTH)"
     },
     "ca_cert": {
       "Type": "String",
       "Optional": true,
-      "Description": "CA cert bundle for validating the Grafana API's certificate.",
+      "Description": "Certificate CA bundle to use to verify the Grafana server's certificate. May alternatively be set via the `GRAFANA_CA_CERT` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_CA_CERT)"
     },
     "insecure_skip_verify": {
       "Type": "Bool",
       "Optional": true,
-      "Description": "Skip TLS certificate verification",
+      "Description": "Skip TLS certificate verification. May alternatively be set via the `GRAFANA_INSECURE_SKIP_VERIFY` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_INSECURE_SKIP_VERIFY)"
     },
     "org_id": {
       "Type": "Int",
       "Required": true,
-      "Description": "Organization id for resources",
+      "Description": "The organization id to operate on within grafana. May alternatively be set via the `GRAFANA_ORG_ID` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_ORG_ID)"
     },
     "tls_cert": {
       "Type": "String",
       "Optional": true,
-      "Description": "Client TLS cert for accessing the Grafana API.",
+      "Description": "Client TLS certificate file to use to authenticate to the Grafana server. May alternatively be set via the `GRAFANA_TLS_CERT` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_TLS_CERT)"
     },
     "tls_key": {
       "Type": "String",
       "Optional": true,
-      "Description": "Client TLS key for accessing the Grafana API.",
+      "Description": "Client TLS key file to use to authenticate to the Grafana server. May alternatively be set via the `GRAFANA_TLS_CERT` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_TLS_KEY)"
     },
     "url": {
       "Type": "String",
       "Required": true,
-      "Description": "URL of the root of the target Grafana server.",
+      "Description": "The root URL of a Grafana server. May alternatively be set via the `GRAFANA_URL` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_URL)"
     }
   },
@@ -53,6 +53,7 @@
       "disable_resolve_message": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "Whether to disable sending resolve messages.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -61,6 +62,7 @@
       "frequency": {
         "Type": "String",
         "Optional": true,
+        "Description": "Frequency of alert reminders. Frequency must be set if reminders are enabled.",
         "Default": {
           "Type": "string"
         }
@@ -68,6 +70,7 @@
       "is_default": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "Is this the default channel for all your alerts.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -75,11 +78,13 @@
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The name of the alert notification channel."
       },
       "send_reminder": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "Whether to send reminders for triggered alerts.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -87,44 +92,53 @@
       },
       "settings": {
         "Type": "Map",
-        "Optional": true
+        "Optional": true,
+        "Description": "Additional settings, for full reference see [Grafana HTTP API documentation](https://grafana.com/docs/grafana/latest/http_api/alerting_notification_channels/)."
       },
       "type": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The type of the alert notification channel."
       },
       "uid": {
         "Type": "String",
         "Optional": true,
+        "Description": "Unique identifier. If unset, this will be automatically generated.",
         "Computed": true
       }
     },
     "grafana_dashboard": {
       "config_json": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The complete dashboard model JSON."
       },
       "dashboard_id": {
         "Type": "Int",
+        "Description": "The numeric ID of the dashboard computed by Grafana.",
         "Computed": true
       },
       "folder": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "The id of the folder to save the dashboard in."
       },
       "slug": {
         "Type": "String",
+        "Description": "URL friendly version of the dashboard title.",
         "Computed": true
       }
     },
     "grafana_dashboard_permission": {
       "dashboard_id": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "ID of the dashboard to apply permissions to."
       },
       "permissions": {
         "Type": "Set",
         "Required": true,
+        "Description": "The permission items to add/update. Items that are omitted from the list will be removed.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -132,26 +146,30 @@
           "Info": {
             "permission": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "Permission to associate with item. Must be one of `View`, `Edit`, or `Admin`."
             },
             "role": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "Manage permissions for `Viewer` or `Editor` roles."
             },
             "team_id": {
               "Type": "Int",
               "Optional": true,
+              "Description": "ID of the team to manage permissions for.",
               "Default": {
                 "Type": "int",
-                "Value": "-1"
+                "Value": "0"
               }
             },
             "user_id": {
               "Type": "Int",
               "Optional": true,
+              "Description": "ID of the user to manage permissions for.",
               "Default": {
                 "Type": "int",
-                "Value": "-1"
+                "Value": "0"
               }
             }
           }
@@ -162,6 +180,7 @@
       "access_mode": {
         "Type": "String",
         "Optional": true,
+        "Description": "The method by which Grafana will access the data source: `proxy` or `direct`.",
         "Default": {
           "Type": "string",
           "Value": "proxy"
@@ -170,6 +189,7 @@
       "basic_auth_enabled": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "Whether to enable basic auth for the data source.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -178,6 +198,7 @@
       "basic_auth_password": {
         "Type": "String",
         "Optional": true,
+        "Description": "Basic auth password.",
         "Default": {
           "Type": "string"
         }
@@ -185,6 +206,7 @@
       "basic_auth_username": {
         "Type": "String",
         "Optional": true,
+        "Description": "Basic auth username.",
         "Default": {
           "Type": "string"
         }
@@ -192,6 +214,7 @@
       "database_name": {
         "Type": "String",
         "Optional": true,
+        "Description": "(Required by some data source types) The name of the database to use on the selected data source server.",
         "Default": {
           "Type": "string"
         }
@@ -199,6 +222,7 @@
       "is_default": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "Whether to set the data source as default. This should only be `true` to a single data source.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -207,6 +231,7 @@
       "json_data": {
         "Type": "List",
         "Optional": true,
+        "Description": "(Required by some data source types)",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -214,134 +239,166 @@
           "Info": {
             "assume_role_arn": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(CloudWatch) The ARN of the role to be assumed by Grafana when using the CloudWatch data source."
             },
             "auth_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(CloudWatch) The authentication type used to access the data source."
             },
             "authentication_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Stackdriver) The authentication type: `jwt` or `gce`."
             },
             "client_email": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Stackdriver) Service account email address."
             },
             "conn_max_lifetime": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Description": "(MySQL, PostgreSQL, and MSSQL) Maximum amount of time in seconds a connection may be reused (Grafana v5.4+)."
             },
             "custom_metrics_namespaces": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(CloudWatch) A comma-separated list of custom namespaces to be queried by the CloudWatch data source."
             },
             "default_project": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Stackdriver) The default project for the data source."
             },
             "default_region": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(CloudWatch) The default region for the data source."
             },
             "encrypt": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(MSSQL) Connection SSL encryption handling: 'disable', 'false' or 'true'."
             },
             "es_version": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Elasticsearch) Elasticsearch version as a number (2/5/56/60/70)."
             },
             "graphite_version": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Graphite) Graphite version."
             },
             "http_method": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Prometheus) HTTP method to use for making requests."
             },
             "interval": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Elasticsearch) Index date time format. nil(No Pattern), 'Hourly', 'Daily', 'Weekly', 'Monthly' or 'Yearly'."
             },
             "log_level_field": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Elasticsearch) Which field should be used to indicate the priority of the log message."
             },
             "log_message_field": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Elasticsearch) Which field should be used as the log message."
             },
             "max_idle_conns": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Description": "(MySQL, PostgreSQL and MSSQL) Maximum number of connections in the idle connection pool (Grafana v5.4+)."
             },
             "max_open_conns": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Description": "(MySQL, PostgreSQL and MSSQL) Maximum number of open connections to the database (Grafana v5.4+)."
             },
             "postgres_version": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Description": "(PostgreSQL) Postgres version as a number (903/904/905/906/1000) meaning v9.3, v9.4, etc."
             },
             "profile": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(CloudWatch) The credentials profile name to use when authentication type is set as 'Credentials file'."
             },
             "query_timeout": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Prometheus) Timeout for queries made to the Prometheus data source in seconds."
             },
             "ssl_mode": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(PostgreSQL) SSLmode. 'disable', 'require', 'verify-ca' or 'verify-full'."
             },
             "time_field": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Elasticsearch) Which field that should be used as timestamp."
             },
             "time_interval": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Prometheus, Elasticsearch, InfluxDB, MySQL, PostgreSQL, and MSSQL) Lowest interval/step value that should be used for this data source."
             },
             "timescaledb": {
               "Type": "Bool",
-              "Optional": true
+              "Optional": true,
+              "Description": "(PostgreSQL) Enable usage of TimescaleDB extension."
             },
             "tls_auth": {
               "Type": "Bool",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) Enable TLS authentication using client cert configured in secure json data."
             },
             "tls_auth_with_ca_cert": {
               "Type": "Bool",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) Enable TLS authentication using CA cert."
             },
             "tls_skip_verify": {
               "Type": "Bool",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) Controls whether a client verifies the server’s certificate chain and host name."
             },
             "token_uri": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Stackdriver) The token URI used, provided in the service account key."
             },
             "tsdb_resolution": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(OpenTSDB) Resolution."
             },
             "tsdb_version": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(OpenTSDB) Version."
             }
           }
         }
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "A unique name for the data source."
       },
       "password": {
         "Type": "String",
         "Optional": true,
+        "Description": "(Required by some data source types) The password to use to authenticate to the data source.",
         "Default": {
           "Type": "string"
         }
@@ -356,50 +413,61 @@
           "Info": {
             "access_key": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(CloudWatch) The access key to use to access the data source."
             },
             "basic_auth_password": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) Password to use for basic authentication."
             },
             "password": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) Password to use for authentication."
             },
             "private_key": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Stackdriver) The service account key `private_key` to use to access the data source."
             },
             "secret_key": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(CloudWatch) The secret key to use to access the data source."
             },
             "tls_ca_cert": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) CA cert for out going requests."
             },
             "tls_client_cert": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) TLS Client cert for outgoing requests."
             },
             "tls_client_key": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(All) TLS Client key for outgoing requests."
             }
           }
         }
       },
       "type": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The data source type. Must be one of the supported data source keywords."
       },
       "url": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The URL for the data source. The type of URL required varies depending on the chosen data source type."
       },
       "username": {
         "Type": "String",
         "Optional": true,
+        "Description": "(Required by some data source types) The username to use to authenticate to the data source.",
         "Default": {
           "Type": "string"
         }
@@ -408,21 +476,25 @@
     "grafana_folder": {
       "title": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The title of the folder."
       },
       "uid": {
         "Type": "String",
+        "Description": "Unique identifier.",
         "Computed": true
       }
     },
     "grafana_folder_permission": {
       "folder_uid": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The UID of the folder."
       },
       "permissions": {
         "Type": "Set",
         "Required": true,
+        "Description": "The permission items to add/update. Items that are omitted from the list will be removed.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -430,26 +502,30 @@
           "Info": {
             "permission": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "Permission to associate with item. Must be one of `View`, `Edit`, or `Admin`."
             },
             "role": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "Manage permissions for `Viewer` or `Editor` roles."
             },
             "team_id": {
               "Type": "Int",
               "Optional": true,
+              "Description": "ID of the team to manage permissions for.",
               "Default": {
                 "Type": "int",
-                "Value": "-1"
+                "Value": "0"
               }
             },
             "user_id": {
               "Type": "Int",
               "Optional": true,
+              "Description": "ID of the user to manage permissions for.",
               "Default": {
                 "Type": "int",
-                "Value": "-1"
+                "Value": "0"
               }
             }
           }
@@ -460,6 +536,7 @@
       "admin_user": {
         "Type": "String",
         "Optional": true,
+        "Description": "\nThe login name of the configured default admin user for the Grafana\ninstallation. If unset, this value defaults to admin, the Grafana default.\nGrafana adds the default admin user to all organizations automatically upon\ncreation, and this parameter keeps Terraform from removing it from\norganizations.\n",
         "Default": {
           "Type": "string",
           "Value": "admin"
@@ -468,6 +545,7 @@
       "admins": {
         "Type": "Set",
         "Optional": true,
+        "Description": "\nA list of email addresses corresponding to users who should be given admin\naccess to the organization. Note: users specified here must already exist in\nGrafana unless 'create_users' is set to true.\n",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -477,6 +555,7 @@
       "create_users": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "\nWhether or not to create Grafana users specified in the organization's\nmembership if they don't already exist in Grafana. If unspecified, this\nparameter defaults to true, creating placeholder users with the name, login,\nand email set to the email of the user, and a random password. Setting this\noption to false will cause an error to be thrown for any users that do not\nalready exist in Grafana.\n",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -485,6 +564,7 @@
       "editors": {
         "Type": "Set",
         "Optional": true,
+        "Description": "\nA list of email addresses corresponding to users who should be given editor\naccess to the organization. Note: users specified here must already exist in\nGrafana unless 'create_users' is set to true.\n",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -493,15 +573,18 @@
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The display name for the Grafana organization created."
       },
       "org_id": {
         "Type": "Int",
+        "Description": "The organization id assigned to this organization by Grafana.",
         "Computed": true
       },
       "viewers": {
         "Type": "Set",
         "Optional": true,
+        "Description": "\nA list of email addresses corresponding to users who should be given viewer\naccess to the organization. Note: users specified here must already exist in\nGrafana unless 'create_users' is set to true.\n",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -512,11 +595,13 @@
     "grafana_team": {
       "email": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "An email address for the team."
       },
       "members": {
         "Type": "List",
         "Optional": true,
+        "Description": "\nA list of email addresses corresponding to users who should be given membership\nto the team. Note: users specified here must already exist in Grafana.\n",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -525,39 +610,47 @@
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The display name for the Grafana team created."
       },
       "team_id": {
         "Type": "Int",
+        "Description": "The team id assigned to this team by Grafana.",
         "Computed": true
       }
     },
     "grafana_team_preferences": {
       "home_dashboard_id": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "The numeric ID of the dashboard to display when a team member logs in."
       },
       "team_id": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "The numeric team ID."
       },
       "theme": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The theme for the specified team. Available themes are `light`, `dark`, or an empty string for the default theme."
       },
       "timezone": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The timezone for the specified team. Available values are `utc`, `browser`, or an empty string for the default."
       }
     },
     "grafana_user": {
       "email": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The email address of the Grafana user."
       },
       "is_admin": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "Whether to make user an admin.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -565,15 +658,18 @@
       },
       "login": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The username for the Grafana user."
       },
       "name": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The display name for the Grafana user."
       },
       "password": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The password for the Grafana user."
       }
     }
   },

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "google",
   "type": "provider",
-  "version": "v3.64.0",
+  "version": "v3.66.1",
   "provider": {
     "access_approval_custom_endpoint": {
       "Type": "String",
@@ -18,7 +18,6 @@
     "access_token": {
       "Type": "String",
       "Optional": true,
-      "DefaultFunc": "MENV(GOOGLE_OAUTH_ACCESS_TOKEN)",
       "ConflictsWith": [
         "credentials"
       ]
@@ -178,8 +177,7 @@
     },
     "credentials": {
       "Type": "String",
-      "Optional": true,
-      "DefaultFunc": "MENV(GOOGLE_CREDENTIALS,GOOGLE_CLOUD_KEYFILE_JSON,GCLOUD_KEYFILE_JSON)"
+      "Optional": true
     },
     "data_catalog_custom_endpoint": {
       "Type": "String",
@@ -5384,7 +5382,7 @@
             "source_format": {
               "Type": "String",
               "Optional": true,
-              "Description": "The format of the data files. For CSV files, specify \"CSV\". For datastore backups, specify \"DATASTORE_BACKUP\".\nFor newline-delimited JSON, specify \"NEWLINE_DELIMITED_JSON\". For Avro, specify \"AVRO\". For parquet, specify \"PARQUET\".\nFor orc, specify \"ORC\". The default value is CSV.",
+              "Description": "The format of the data files. For CSV files, specify \"CSV\". For datastore backups, specify \"DATASTORE_BACKUP\".\nFor newline-delimited JSON, specify \"NEWLINE_DELIMITED_JSON\". For Avro, specify \"AVRO\". For parquet, specify \"PARQUET\".\nFor orc, specify \"ORC\". [Beta] For Bigtable, specify \"BIGTABLE\".\nThe default value is CSV.",
               "Default": {
                 "Type": "string",
                 "Value": "CSV"
@@ -8135,7 +8133,7 @@
         }
       },
       "roles": {
-        "Type": "List",
+        "Type": "Set",
         "Required": true,
         "Description": "The MembershipRoles that apply to the Membership.\nMust not contain duplicate MembershipRoles with the same name.",
         "IsBlock": true,
@@ -8389,7 +8387,7 @@
             "annotations": {
               "Type": "Map",
               "Optional": true,
-              "Description": "Annotations is a key value map stored with a resource that\nmay be set by external tools to store and retrieve arbitrary metadata. More\ninfo: http://kubernetes.io/docs/user-guide/annotations\n\n**Note**: The Cloud Run API may add additional annotations that were not provided in your config.\nIf terraform plan shows a diff where a server-side annotation is added, you can add it to your config\nor apply the lifecycle.ignore_changes rule to the metadata.0.annotations field.",
+              "Description": "Annotations is a key value map stored with a resource that\nmay be set by external tools to store and retrieve arbitrary metadata. More\ninfo: http://kubernetes.io/docs/user-guide/annotations\n\n**Note**: The Cloud Run API may add additional annotations that were not provided in your config.\nIf terraform plan shows a diff where a server-side annotation is added, you can add it to your config\nor apply the lifecycle.ignore_changes rule to the metadata.0.annotations field.\n\nCloud Run (fully managed) uses the following annotation keys to configure features on a Service:\n\n- 'run.googleapis.com/ingress' sets the [ingress settings](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--ingress)\n  for the Service. For example, '\"run.googleapis.com/ingress\" = \"all\"'.",
               "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
@@ -10129,7 +10127,7 @@
       "available_memory_mb": {
         "Type": "Int",
         "Optional": true,
-        "Description": "Memory (in MB), available to the function. Default value is 256MB. Allowed values are: 128MB, 256MB, 512MB, 1024MB, and 2048MB.",
+        "Description": "Memory (in MB), available to the function. Default value is 256. Possible values include 128, 256, 512, 1024, etc.",
         "Default": {
           "Type": "int",
           "Value": "256"
@@ -11118,7 +11116,7 @@
       "purpose": {
         "Type": "String",
         "Optional": true,
-        "Description": "The purpose of this resource, which can be one of the following values:\n\n* GCE_ENDPOINT for addresses that are used by VM instances, alias IP ranges, internal load balancers, and similar resources.\n\n* SHARED_LOADBALANCER_VIP for an address that can be used by multiple internal load balancers.\n\n* VPC_PEERING for addresses that are reserved for VPC peer networks.\n\nThis should only be set when using an Internal address. Possible values: [\"GCE_ENDPOINT\", \"VPC_PEERING\", \"SHARED_LOADBALANCER_VIP\"]",
+        "Description": "The purpose of this resource. Possible values include:\n\n* GCE_ENDPOINT for addresses that are used by VM instances, alias IP ranges, internal load balancers, and similar resources.\n\n* SHARED_LOADBALANCER_VIP for an address that can be used by multiple internal load balancers.\n\n* VPC_PEERING for addresses that are reserved for VPC peer networks.",
         "Computed": true
       },
       "region": {
@@ -12761,7 +12759,7 @@
       "ip_address": {
         "Type": "String",
         "Optional": true,
-        "Description": "The IP address that this forwarding rule is serving on behalf of.\n\nAddresses are restricted based on the forwarding rule's load balancing\nscheme (EXTERNAL or INTERNAL) and scope (global or regional).\n\nWhen the load balancing scheme is EXTERNAL, for global forwarding\nrules, the address must be a global IP, and for regional forwarding\nrules, the address must live in the same region as the forwarding\nrule. If this field is empty, an ephemeral IPv4 address from the same\nscope (global or regional) will be assigned. A regional forwarding\nrule supports IPv4 only. A global forwarding rule supports either IPv4\nor IPv6.\n\nWhen the load balancing scheme is INTERNAL, this can only be an RFC\n1918 IP address belonging to the network/subnet configured for the\nforwarding rule. By default, if this field is empty, an ephemeral\ninternal IP address will be automatically allocated from the IP range\nof the subnet or network configured for this forwarding rule.\n\nAn address must be specified by a literal IP address. ~\u003e **NOTE:** While\nthe API allows you to specify various resource paths for an address resource\ninstead, Terraform requires this to specifically be an IP address to\navoid needing to fetching the IP address from resource paths on refresh\nor unnecessary diffs.",
+        "Description": "The IP address that this forwarding rule serves. When a client sends\ntraffic to this IP address, the forwarding rule directs the traffic to\nthe target that you specify in the forwarding rule. The\nloadBalancingScheme and the forwarding rule's target determine the\ntype of IP address that you can use. For detailed information, refer\nto [IP address specifications](https://cloud.google.com/load-balancing/docs/forwarding-rule-concepts#ip_address_specifications).\n\nAn address can be specified either by a literal IP address or a\nreference to an existing Address resource. If you don't specify a\nreserved IP address, an ephemeral IP address is assigned.\n\nThe value must be set to 0.0.0.0 when the target is a targetGrpcProxy\nthat has validateForProxyless field set to true.\n\nFor Private Service Connect forwarding rules that forward traffic to\nGoogle APIs, IP address must be provided.",
         "Computed": true
       },
       "ip_protocol": {
@@ -12912,7 +12910,7 @@
       "purpose": {
         "Type": "String",
         "Optional": true,
-        "Description": "The purpose of the resource. For global internal addresses it can be\n\n* VPC_PEERING - for peer networks\n* PRIVATE_SERVICE_CONNECT - for ([Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html) only) Private Service Connect networks\n\nThis should only be set when using an Internal address. Possible values: [\"VPC_PEERING\", \"PRIVATE_SERVICE_CONNECT\"]"
+        "Description": "The purpose of the resource. Possible values include:\n\n* VPC_PEERING - for peer networks\n\n* PRIVATE_SERVICE_CONNECT - for ([Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html) only) Private Service Connect networks"
       },
       "self_link": {
         "Type": "String",
@@ -12933,7 +12931,7 @@
       "ip_address": {
         "Type": "String",
         "Optional": true,
-        "Description": "The IP address that this forwarding rule is serving on behalf of.\n\nAddresses are restricted based on the forwarding rule's load balancing\nscheme (EXTERNAL or INTERNAL) and scope (global or regional).\n\nWhen the load balancing scheme is EXTERNAL, for global forwarding\nrules, the address must be a global IP, and for regional forwarding\nrules, the address must live in the same region as the forwarding\nrule. If this field is empty, an ephemeral IPv4 address from the same\nscope (global or regional) will be assigned. A regional forwarding\nrule supports IPv4 only. A global forwarding rule supports either IPv4\nor IPv6.\n\nWhen the load balancing scheme is INTERNAL, this can only be an RFC\n1918 IP address belonging to the network/subnet configured for the\nforwarding rule. By default, if this field is empty, an ephemeral\ninternal IP address will be automatically allocated from the IP range\nof the subnet or network configured for this forwarding rule.\n\nAn address must be specified by a literal IP address. ~\u003e **NOTE**: While\nthe API allows you to specify various resource paths for an address resource\ninstead, Terraform requires this to specifically be an IP address to\navoid needing to fetching the IP address from resource paths on refresh\nor unnecessary diffs.",
+        "Description": "The IP address that this forwarding rule serves. When a client sends\ntraffic to this IP address, the forwarding rule directs the traffic to\nthe target that you specify in the forwarding rule. The\nloadBalancingScheme and the forwarding rule's target determine the\ntype of IP address that you can use. For detailed information, refer\nto [IP address specifications](https://cloud.google.com/load-balancing/docs/forwarding-rule-concepts#ip_address_specifications).\n\nAn address can be specified either by a literal IP address or a\nreference to an existing Address resource. If you don't specify a\nreserved IP address, an ephemeral IP address is assigned.\n\nThe value must be set to 0.0.0.0 when the target is a targetGrpcProxy\nthat has validateForProxyless field set to true.\n\nFor Private Service Connect forwarding rules that forward traffic to\nGoogle APIs, IP address must be provided.",
         "Computed": true
       },
       "ip_protocol": {
@@ -14486,7 +14484,6 @@
               "Type": "Set",
               "Required": true,
               "Description": "A list of service scopes.",
-              "MinItems": 1,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -15094,7 +15091,6 @@
               "Type": "Set",
               "Required": true,
               "Description": "A list of service scopes.",
-              "MinItems": 1,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -16034,6 +16030,11 @@
                 "Type": "bool",
                 "Value": "true"
               }
+            },
+            "min_node_cpus": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Minimum number of cpus for the instance."
             },
             "node_affinities": {
               "Type": "Set",
@@ -26341,6 +26342,9 @@
         "Description": "The configuration of the nodepool",
         "Computed": true,
         "MaxItems": 1,
+        "ConflictsWith": [
+          "enable_autopilot"
+        ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -28095,7 +28099,11 @@
       "force_delete": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "This confirms the deletion of any possible tags using this template. Must be set to true in order to delete the tag template."
+        "Description": "This confirms the deletion of any possible tags using this template. Must be set to true in order to delete the tag template.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "name": {
         "Type": "String",
@@ -30103,6 +30111,47 @@
                       "ElementsType": "String"
                     }
                   },
+                  "shielded_instance_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Shielded Instance Config for clusters using Compute Engine Shielded VMs.",
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "enable_integrity_monitoring": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Defines whether instances have integrity monitoring enabled.",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "enable_secure_boot": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Defines whether instances have Secure Boot enabled.",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "enable_vtpm": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Defines whether instances have the vTPM enabled.",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        }
+                      }
+                    }
+                  },
                   "subnetwork": {
                     "Type": "String",
                     "Optional": true,
@@ -31574,6 +31623,1574 @@
         "Computed": true
       }
     },
+    "google_dataproc_workflow_template": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "jobs": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "hadoop_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "archive_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "args": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "jar_file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logging_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "driver_log_levels": {
+                          "Type": "Map",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "main_class": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "main_jar_file_uri": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "hive_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "continue_on_failure": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "jar_file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "query_file_uri": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "query_list": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "queries": {
+                          "Type": "List",
+                          "Required": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "script_variables": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "labels": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "pig_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "continue_on_failure": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "jar_file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logging_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "driver_log_levels": {
+                          "Type": "Map",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "query_file_uri": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "query_list": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "queries": {
+                          "Type": "List",
+                          "Required": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "script_variables": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "prerequisite_step_ids": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "presto_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "client_tags": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "continue_on_failure": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "logging_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "driver_log_levels": {
+                          "Type": "Map",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "output_format": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "query_file_uri": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "query_list": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "queries": {
+                          "Type": "List",
+                          "Required": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "pyspark_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "archive_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "args": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "jar_file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logging_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "driver_log_levels": {
+                          "Type": "Map",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "main_python_file_uri": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "python_file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "scheduling": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "max_failures_per_hour": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "max_failures_total": {
+                    "Type": "Int",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "spark_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "archive_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "args": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "jar_file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logging_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "driver_log_levels": {
+                          "Type": "Map",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "main_class": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "main_jar_file_uri": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "spark_r_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "archive_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "args": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logging_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "driver_log_levels": {
+                          "Type": "Map",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "main_r_file_uri": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "spark_sql_job": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "jar_file_uris": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logging_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "driver_log_levels": {
+                          "Type": "Map",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "properties": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "query_file_uri": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "query_list": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "queries": {
+                          "Type": "List",
+                          "Required": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "script_variables": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "step_id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "parameters": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "fields": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "validation": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "regex": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "regexes": {
+                          "Type": "List",
+                          "Required": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "values": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "values": {
+                          "Type": "List",
+                          "Required": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "placement": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cluster_selector": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cluster_labels": {
+                    "Type": "Map",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "zone": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "managed_cluster": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cluster_name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "config": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "autoscaling_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "policy": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "encryption_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "gce_pd_kms_key_name": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "endpoint_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enable_http_port_access": {
+                                "Type": "Bool",
+                                "Optional": true
+                              },
+                              "http_ports": {
+                                "Type": "Map",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "gce_cluster_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "internal_ip_only": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Computed": true
+                              },
+                              "metadata": {
+                                "Type": "Map",
+                                "Optional": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "network": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "node_group_affinity": {
+                                "Type": "List",
+                                "Optional": true,
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "node_group": {
+                                      "Type": "String",
+                                      "Required": true
+                                    }
+                                  }
+                                }
+                              },
+                              "private_ipv6_google_access": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "reservation_affinity": {
+                                "Type": "List",
+                                "Optional": true,
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "consume_reservation_type": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "key": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "values": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "service_account": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "service_account_scopes": {
+                                "Type": "List",
+                                "Optional": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "subnetwork": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "tags": {
+                                "Type": "Set",
+                                "Optional": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "zone": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
+                        "initialization_actions": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "executable_file": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "execution_timeout": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "lifecycle_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "auto_delete_time": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "auto_delete_ttl": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "idle_delete_ttl": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "idle_start_time": {
+                                "Type": "String",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
+                        "master_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "accelerators": {
+                                "Type": "List",
+                                "Optional": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "accelerator_count": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "accelerator_type": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    }
+                                  }
+                                }
+                              },
+                              "disk_config": {
+                                "Type": "List",
+                                "Optional": true,
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "boot_disk_size_gb": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "boot_disk_type": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "num_local_ssds": {
+                                      "Type": "Int",
+                                      "Optional": true,
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "image": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "instance_names": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "is_preemptible": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "machine_type": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "managed_group_config": {
+                                "Type": "List",
+                                "Computed": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "ComputedBlock",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "instance_group_manager_name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "instance_template_name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "min_cpu_platform": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "num_instances": {
+                                "Type": "Int",
+                                "Optional": true
+                              },
+                              "preemptibility": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "secondary_worker_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "accelerators": {
+                                "Type": "List",
+                                "Optional": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "accelerator_count": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "accelerator_type": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    }
+                                  }
+                                }
+                              },
+                              "disk_config": {
+                                "Type": "List",
+                                "Optional": true,
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "boot_disk_size_gb": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "boot_disk_type": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "num_local_ssds": {
+                                      "Type": "Int",
+                                      "Optional": true,
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "image": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "instance_names": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "is_preemptible": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "machine_type": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "managed_group_config": {
+                                "Type": "List",
+                                "Computed": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "ComputedBlock",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "instance_group_manager_name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "instance_template_name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "min_cpu_platform": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "num_instances": {
+                                "Type": "Int",
+                                "Optional": true
+                              },
+                              "preemptibility": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "security_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "kerberos_config": {
+                                "Type": "List",
+                                "Optional": true,
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "cross_realm_trust_admin_server": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "cross_realm_trust_kdc": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "cross_realm_trust_realm": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "cross_realm_trust_shared_password": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "enable_kerberos": {
+                                      "Type": "Bool",
+                                      "Optional": true
+                                    },
+                                    "kdc_db_key": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "key_password": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "keystore": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "keystore_password": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "kms_key": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "realm": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "root_principal_password": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "tgt_lifetime_hours": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "truststore": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "truststore_password": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "software_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "image_version": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "properties": {
+                                "Type": "Map",
+                                "Optional": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "staging_bucket": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "temp_bucket": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "worker_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "accelerators": {
+                                "Type": "List",
+                                "Optional": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "accelerator_count": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "accelerator_type": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    }
+                                  }
+                                }
+                              },
+                              "disk_config": {
+                                "Type": "List",
+                                "Optional": true,
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "boot_disk_size_gb": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "boot_disk_type": {
+                                      "Type": "String",
+                                      "Optional": true
+                                    },
+                                    "num_local_ssds": {
+                                      "Type": "Int",
+                                      "Optional": true,
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "image": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "instance_names": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "is_preemptible": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "machine_type": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "managed_group_config": {
+                                "Type": "List",
+                                "Computed": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "ComputedBlock",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "instance_group_manager_name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "instance_template_name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "min_cpu_platform": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "num_instances": {
+                                "Type": "Int",
+                                "Optional": true
+                              },
+                              "preemptibility": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "labels": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "update_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "version": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "google_datastore_index": {
       "__timeouts__": [
         "create",
@@ -32386,7 +34003,7 @@
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "One of valid DNS resource types. Possible values: [\"A\", \"AAAA\", \"CAA\", \"CNAME\", \"MX\", \"NAPTR\", \"NS\", \"PTR\", \"SOA\", \"SPF\", \"SRV\", \"TLSA\", \"TXT\"]"
+        "Description": "One of valid DNS resource types. Possible values: [\"A\", \"AAAA\", \"CAA\", \"CNAME\", \"DNSKEY\", \"DS\", \"IPSECVPNKEY\", \"MX\", \"NAPTR\", \"NS\", \"PTR\", \"SOA\", \"SPF\", \"SRV\", \"SSHFP\", \"TLSA\", \"TXT\"]"
       }
     },
     "google_endpoints_service": {
@@ -32618,6 +34235,148 @@
       "service_name": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "google_eventarc_trigger": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "destination": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_function": {
+              "Type": "String",
+              "Optional": true
+            },
+            "cloud_run_service": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "path": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "region": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "service": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "matching_criteria": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "attribute": {
+              "Type": "String",
+              "Required": true
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "service_account": {
+        "Type": "String",
+        "Optional": true
+      },
+      "transport": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "pubsub": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "subscription": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "topic": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "update_time": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "google_filestore_instance": {
@@ -43005,6 +44764,24 @@
           "Value": "true"
         }
       },
+      "encryption_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Encryption configuration for the database",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "kms_key_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Fully qualified name of the KMS key to use to encrypt this database. This key must exist\nin the same location as the Spanner Database."
+            }
+          }
+        }
+      },
       "instance": {
         "Type": "String",
         "Required": true,
@@ -43382,7 +45159,7 @@
           "Info": {
             "point_in_time": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "The timestamp of the point in time that should be restored."
             },
             "source_instance_name": {
@@ -46073,7 +47850,7 @@
               }
             },
             "roles": {
-              "Type": "List",
+              "Type": "Set",
               "Description": "The MembershipRoles that apply to the Membership.\nMust not contain duplicate MembershipRoles with the same name.",
               "Computed": true,
               "IsBlock": true,
@@ -46221,7 +47998,7 @@
           "Info": {
             "annotations": {
               "Type": "Map",
-              "Description": "Annotations is a key value map stored with a resource that\nmay be set by external tools to store and retrieve arbitrary metadata. More\ninfo: http://kubernetes.io/docs/user-guide/annotations\n\n**Note**: The Cloud Run API may add additional annotations that were not provided in your config.\nIf terraform plan shows a diff where a server-side annotation is added, you can add it to your config\nor apply the lifecycle.ignore_changes rule to the metadata.0.annotations field.",
+              "Description": "Annotations is a key value map stored with a resource that\nmay be set by external tools to store and retrieve arbitrary metadata. More\ninfo: http://kubernetes.io/docs/user-guide/annotations\n\n**Note**: The Cloud Run API may add additional annotations that were not provided in your config.\nIf terraform plan shows a diff where a server-side annotation is added, you can add it to your config\nor apply the lifecycle.ignore_changes rule to the metadata.0.annotations field.\n\nCloud Run (fully managed) uses the following annotation keys to configure features on a Service:\n\n- 'run.googleapis.com/ingress' sets the [ingress settings](https://cloud.google.com/sdk/gcloud/reference/run/deploy#--ingress)\n  for the Service. For example, '\"run.googleapis.com/ingress\" = \"all\"'.",
               "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
@@ -46685,7 +48462,7 @@
     "google_cloudfunctions_function": {
       "available_memory_mb": {
         "Type": "Int",
-        "Description": "Memory (in MB), available to the function. Default value is 256MB. Allowed values are: 128MB, 256MB, 512MB, 1024MB, and 2048MB.",
+        "Description": "Memory (in MB), available to the function. Default value is 256. Possible values include 128, 256, 512, 1024, etc.",
         "Computed": true
       },
       "build_environment_variables": {
@@ -47738,7 +49515,7 @@
       },
       "ip_address": {
         "Type": "String",
-        "Description": "The IP address that this forwarding rule is serving on behalf of.\n\nAddresses are restricted based on the forwarding rule's load balancing\nscheme (EXTERNAL or INTERNAL) and scope (global or regional).\n\nWhen the load balancing scheme is EXTERNAL, for global forwarding\nrules, the address must be a global IP, and for regional forwarding\nrules, the address must live in the same region as the forwarding\nrule. If this field is empty, an ephemeral IPv4 address from the same\nscope (global or regional) will be assigned. A regional forwarding\nrule supports IPv4 only. A global forwarding rule supports either IPv4\nor IPv6.\n\nWhen the load balancing scheme is INTERNAL, this can only be an RFC\n1918 IP address belonging to the network/subnet configured for the\nforwarding rule. By default, if this field is empty, an ephemeral\ninternal IP address will be automatically allocated from the IP range\nof the subnet or network configured for this forwarding rule.\n\nAn address must be specified by a literal IP address. ~\u003e **NOTE:** While\nthe API allows you to specify various resource paths for an address resource\ninstead, Terraform requires this to specifically be an IP address to\navoid needing to fetching the IP address from resource paths on refresh\nor unnecessary diffs.",
+        "Description": "The IP address that this forwarding rule serves. When a client sends\ntraffic to this IP address, the forwarding rule directs the traffic to\nthe target that you specify in the forwarding rule. The\nloadBalancingScheme and the forwarding rule's target determine the\ntype of IP address that you can use. For detailed information, refer\nto [IP address specifications](https://cloud.google.com/load-balancing/docs/forwarding-rule-concepts#ip_address_specifications).\n\nAn address can be specified either by a literal IP address or a\nreference to an existing Address resource. If you don't specify a\nreserved IP address, an ephemeral IP address is assigned.\n\nThe value must be set to 0.0.0.0 when the target is a targetGrpcProxy\nthat has validateForProxyless field set to true.\n\nFor Private Service Connect forwarding rules that forward traffic to\nGoogle APIs, IP address must be provided.",
         "Computed": true
       },
       "ip_protocol": {
@@ -47851,7 +49628,7 @@
       },
       "ip_address": {
         "Type": "String",
-        "Description": "The IP address that this forwarding rule is serving on behalf of.\n\nAddresses are restricted based on the forwarding rule's load balancing\nscheme (EXTERNAL or INTERNAL) and scope (global or regional).\n\nWhen the load balancing scheme is EXTERNAL, for global forwarding\nrules, the address must be a global IP, and for regional forwarding\nrules, the address must live in the same region as the forwarding\nrule. If this field is empty, an ephemeral IPv4 address from the same\nscope (global or regional) will be assigned. A regional forwarding\nrule supports IPv4 only. A global forwarding rule supports either IPv4\nor IPv6.\n\nWhen the load balancing scheme is INTERNAL, this can only be an RFC\n1918 IP address belonging to the network/subnet configured for the\nforwarding rule. By default, if this field is empty, an ephemeral\ninternal IP address will be automatically allocated from the IP range\nof the subnet or network configured for this forwarding rule.\n\nAn address must be specified by a literal IP address. ~\u003e **NOTE**: While\nthe API allows you to specify various resource paths for an address resource\ninstead, Terraform requires this to specifically be an IP address to\navoid needing to fetching the IP address from resource paths on refresh\nor unnecessary diffs.",
+        "Description": "The IP address that this forwarding rule serves. When a client sends\ntraffic to this IP address, the forwarding rule directs the traffic to\nthe target that you specify in the forwarding rule. The\nloadBalancingScheme and the forwarding rule's target determine the\ntype of IP address that you can use. For detailed information, refer\nto [IP address specifications](https://cloud.google.com/load-balancing/docs/forwarding-rule-concepts#ip_address_specifications).\n\nAn address can be specified either by a literal IP address or a\nreference to an existing Address resource. If you don't specify a\nreserved IP address, an ephemeral IP address is assigned.\n\nThe value must be set to 0.0.0.0 when the target is a targetGrpcProxy\nthat has validateForProxyless field set to true.\n\nFor Private Service Connect forwarding rules that forward traffic to\nGoogle APIs, IP address must be provided.",
         "Computed": true
       },
       "ip_protocol": {
@@ -47930,6 +49707,58 @@
         "Type": "String",
         "Description": "The URL of the target resource to receive the matched traffic.\nThe forwarded traffic must be of a type appropriate to the target object.\nFor INTERNAL_SELF_MANAGED load balancing, only HTTP and HTTPS targets\nare valid.\n\n([Beta](https://terraform.io/docs/providers/google/guides/provider_versions.html) only) For global address with a purpose of PRIVATE_SERVICE_CONNECT and\naddressType of INTERNAL, only \"all-apis\" and \"vpc-sc\" are valid.",
         "Computed": true
+      }
+    },
+    "google_compute_ha_vpn_gateway": {
+      "description": {
+        "Type": "String",
+        "Description": "An optional description of this resource.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the last\ncharacter, which cannot be a dash."
+      },
+      "network": {
+        "Type": "String",
+        "Description": "The network this VPN gateway is accepting traffic for.",
+        "Computed": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The region this gateway should sit in."
+      },
+      "self_link": {
+        "Type": "String",
+        "Computed": true
+      },
+      "vpn_interfaces": {
+        "Type": "List",
+        "Description": "A list of interfaces on this VPN gateway.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Description": "The numeric ID of this VPN gateway interface.",
+              "Computed": true
+            },
+            "ip_address": {
+              "Type": "String",
+              "Description": "The external IP address for this VPN gateway interface.",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "google_compute_health_check": {
@@ -49279,6 +51108,11 @@
             "automatic_restart": {
               "Type": "Bool",
               "Description": "Specifies whether the instance should be automatically restarted if it is terminated by Compute Engine (not terminated by a user). This defaults to true.",
+              "Computed": true
+            },
+            "min_node_cpus": {
+              "Type": "Int",
+              "Description": "Minimum number of cpus for the instance.",
               "Computed": true
             },
             "node_affinities": {
